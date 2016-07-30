@@ -1,6 +1,7 @@
 PS1='\[\e[1;42m \\$?=$? $(shopt -q login_shell; if [ 0 -ne $? ]; then echo "NON-LOGIN "; fi)\[\e[m\]'\
 '\[\e[1;35m\]\u\[\e[m\]:\[\e[34m\]$(id -ng)\[\e[m\]@\[\e[33m\]\H\[\e[m\]:\[\e[1;36m\]$PWD\[\e[m\]'\
 '\n\[\e[1;31m\]\$\[\e[m\] '
+if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then source /usr/share/git-core/contrib/completion/git-prompt.sh; GIT_PS1_SHOWDIRTYSTATE=1; PS1='$(__git_ps1 "[%s]")'$PS1; fi
 alias .ls='ls -alFh --time-style=long-iso --color=auto'
 alias .tree='tree -fiapughDFC --timefmt %F_%T --du --dirsfirst'
 alias .grep='grep -E -n --color=auto'
