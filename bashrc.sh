@@ -38,3 +38,5 @@ alias .bench-teddysun='curl https://raw.githubusercontent.com/teddysun/across/ma
 alias .bench-freevps='curl https://freevps.us/downloads/bench.sh | bash'
 alias .pub-ip='curl -s -4 icanhazip.com'
 alias .git-log='git log --graph --all --decorate --oneline'
+
+
