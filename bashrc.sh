@@ -6,7 +6,6 @@ if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then \
     GIT_PS1_SHOWDIRTYSTATE=1; GIT_PS1_SHOWSTASHSTATE=1; GIT_PS1_SHOWUNTRACKEDFILES=1; GIT_PS1_SHOWUPSTREAM="verbose legacy git"; GIT_PS1_DESCRIBE_STYLE=branch; GIT_PS1_SHOWCOLORHINTS=1; \
     __PS1_GIT=$__CLR_BEG'43;1'$__CLR_MID'$(__git_ps1 "(%s)")'$__CLR_END; \
 fi
-#__PS1_RET=$__CLR_BEG'41;1'$__CLR_MID'(\\$?=$?)'$__CLR_END
 __PS1_RET=$__CLR_BEG'41;1'$__CLR_MID'$(r=$?; if [ $r -ne 0 ]; then echo "(\\$?=$r)";fi)'$__CLR_END
 __PS1_LOGIN=$__CLR_BEG'45;1'$__CLR_MID'$(shopt -q login_shell; if [ 0 -ne $? ]; then echo "(non-login-shell)"; fi)'$__CLR_END
 __PS1_GRP=$__CLR_BEG'44;1'$__CLR_MID'$(if [ "$(id -ng)" != "$(id -nu)" ]; then echo "(newgrp:$(id -ng))"; fi)'$__CLR_END
