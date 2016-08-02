@@ -1,7 +1,12 @@
 # bashrc
 A simple bashrc script for remote source
 
-Load personal bashrc from remote without modifing anything on that server.
+### Usage:
+A *remote bashrc source* may load your personal bashrc from remote without modifing any file on that server.
 ```sh
 source <(curl -s https://raw.githubusercontent.com/vbem/bashrc/master/bashrc.sh)
 ```
+- Bind *remote bashrc source* to a SSH teminal hotkey may save your time when you have to switch servers back and forth. 
+
+### Snapshot:
+![snapshot](https://raw.githubusercontent.com/vbem/bashrc/master/img/snapshot.png)
