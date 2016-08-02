@@ -1,7 +1,19 @@
-PS1='\[\e[1;42m \\$?=$? $(shopt -q login_shell; if [ 0 -ne $? ]; then echo "NON-LOGIN "; fi)\[\e[m\]'\
-'\[\e[1;35m\]\u\[\e[m\]:\[\e[34m\]$(id -ng)\[\e[m\]@\[\e[33m\]\H\[\e[m\]:\[\e[1;36m\]$PWD\[\e[m\]'\
-'\n\[\e[1;31m\]\$\[\e[m\] '
-if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then source /usr/share/git-core/contrib/completion/git-prompt.sh; GIT_PS1_SHOWDIRTYSTATE=1; PS1='$(__git_ps1 "[%s]")'$PS1; fi
+__CLR_BEG='\[\e['
+__CLR_MID='m\]'
+__CLR_END=$__CLR_BEG$__CLR_MID
+if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then \
+    source /usr/share/git-core/contrib/completion/git-prompt.sh; \
+    GIT_PS1_SHOWDIRTYSTATE=1; GIT_PS1_SHOWSTASHSTATE=1; GIT_PS1_SHOWUNTRACKEDFILES=1; GIT_PS1_SHOWUPSTREAM="verbose legacy git"; GIT_PS1_DESCRIBE_STYLE=branch; GIT_PS1_SHOWCOLORHINTS=1; \
+    __PS1_GIT=$__CLR_BEG'43;1'$__CLR_MID'$(__git_ps1 "(%s)")'$__CLR_END; \
+fi
+__PS1_RET=$__CLR_BEG'41;1'$__CLR_MID'(\\$?=$?)'$__CLR_END
+__PS1_LOGIN=$__CLR_BEG'45;1'$__CLR_MID'$(shopt -q login_shell; if [ 0 -ne $? ]; then echo "(non-login-shell)"; fi)'$__CLR_END
+__PS1_GRP=$__CLR_BEG'44;1'$__CLR_MID'$(if [ "$(id -ng)" != "$(id -nu)" ]; then echo "(newgrp:$(id -ng))"; fi)'$__CLR_END
+__PS1_LOC=$__CLR_BEG'42;1'$__CLR_MID$__CLR_BEG'33'$__CLR_MID'\u'$__CLR_BEG'37'$__CLR_MID'@'$__CLR_BEG'36'$__CLR_MID'\H'$__CLR_BEG'37'$__CLR_MID':'$__CLR_BEG'35'$__CLR_MID'$PWD'$__CLR_END
+__PS1_PRT='\n'$__CLR_BEG'1;31'$__CLR_MID'\$'$__CLR_END' '
+PS1=$__PS1_RET$__PS1_LOGIN$__PS1_GRP$__PS1_GIT$__PS1_LOC$__PS1_PRT
+unset __CLR_BEG __CLR_MID __CLR_END __PS1_GIT __PS1_RET __PS1_LOGIN __PS1_GRP __PS1_LOC __PS1_PRT
+
 alias .ls='ls -alFh --time-style=long-iso --color=auto'
 alias .tree='tree -fiapughDFC --timefmt %F_%T --du --dirsfirst'
 alias .grep='grep -E -n --color=auto'
@@ -38,5 +50,3 @@ alias .bench-teddysun='curl https://raw.githubusercontent.com/teddysun/across/ma
 alias .bench-freevps='curl https://freevps.us/downloads/bench.sh | bash'
 alias .pub-ip='curl -s -4 icanhazip.com'
 alias .git-log='git log --graph --all --decorate --oneline'
-
-
