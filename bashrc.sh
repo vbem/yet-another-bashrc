@@ -1,19 +1,4 @@
-__CLR_BEG='\[\e['; __CLR_MID='m\]'; __CLR_END=$__CLR_BEG$__CLR_MID
-if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then \
-    source /usr/share/git-core/contrib/completion/git-prompt.sh; \
-    GIT_PS1_SHOWDIRTYSTATE=1; GIT_PS1_SHOWSTASHSTATE=1; GIT_PS1_SHOWUNTRACKEDFILES=1; GIT_PS1_SHOWUPSTREAM="verbose legacy git"; GIT_PS1_DESCRIBE_STYLE=branch; GIT_PS1_SHOWCOLORHINTS=1; \
-    __PS1_GIT=$__CLR_BEG'45;1'$__CLR_MID'$(__git_ps1 " %s ")'$__CLR_END; \
-fi
-__PS1_RET=$__CLR_BEG'41;1'$__CLR_MID'$(r=$?; if [ $r -ne 0 ]; then echo " \\$?=$r ";fi)'$__CLR_END
-__PS1_PYVE=$__CLR_BEG'43;1'$__CLR_MID'$(if [ -n "$VIRTUAL_ENV" ]; then echo " py@$VIRTUAL_ENV ";fi)'$__CLR_END
-__PS1_LOGIN=$__CLR_BEG'44;1'$__CLR_MID'$(shopt -q login_shell; if [ 0 -ne $? ]; then echo " non-login-shell "; fi)'$__CLR_END
-__PS1_GRP=$__CLR_BEG'46;1'$__CLR_MID'$(if [ "$(id -ng)" != "$(id -nu)" ]; then echo " newgrp:$(id -ng) "; fi)'$__CLR_END
-__PS1_LOC=$__CLR_BEG'42;1'$__CLR_MID$__CLR_BEG'33'$__CLR_MID' \u'$__CLR_BEG'37'$__CLR_MID'@'$__CLR_BEG'36'$__CLR_MID'\H'$__CLR_BEG'37'$__CLR_MID':'$__CLR_BEG'35'$__CLR_MID'$PWD '$__CLR_END
-__PS1_PRT='\n'$__CLR_BEG'1;31'$__CLR_MID'\$'$__CLR_END' '
-PS1=$__PS1_RET$__PS1_LOGIN$__PS1_GRP$__PS1_LOC$__PS1_PYVE$__PS1_GIT$__PS1_PRT
-unset __CLR_BEG __CLR_MID __CLR_END __PS1_GIT __PS1_RET __PS1_LOGIN __PS1_GRP __PS1_LOC __PS1_PRT
-VIRTUAL_ENV_DISABLE_PROMPT=1
-
+# aliases
 alias .ls='ls -alFh --time-style=long-iso --color=auto'
 alias .tree='tree -fiapughDFC --timefmt %F_%T --du --dirsfirst'
 alias .grep='grep -E -n --color=auto'
@@ -21,15 +6,6 @@ alias .diff='diff -y'
 alias .df='df -h'
 alias .du='du -h'
 alias .date='date +"%F %T"'
-alias .man="env \
-LESS_TERMCAP_mb=$'\E[01;31m' \
-LESS_TERMCAP_md=$'\E[01;31m' \
-LESS_TERMCAP_me=$'\E[0m' \
-LESS_TERMCAP_se=$'\E[0m' \
-LESS_TERMCAP_so=$'\E[01;44;33m' \
-LESS_TERMCAP_ue=$'\E[0m' \
-LESS_TERMCAP_us=$'\E[01;32m' \
-man"
 alias .tar='tar -v'
 alias .free='free -h'
 alias .ps='ps ux'
@@ -50,3 +26,48 @@ alias .bench-teddysun='curl https://raw.githubusercontent.com/teddysun/across/ma
 alias .bench-freevps='curl https://freevps.us/downloads/bench.sh | bash'
 alias .pub-ip='curl -s -4 icanhazip.com'
 alias .git-log='git log --graph --all --decorate --oneline'
+
+# colorful manpage
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+# PS1
+#color wrapper
+CLR_BEG='\[\e['
+CLR_MID='m\]'
+CLR_END=$CLR_BEG'0'$CLR_MID
+# most fixed
+PS1_RET=$CLR_BEG'41;1'$CLR_MID'$(r=$?; if [ $r -ne 0 ]; then echo " \\$?=$r ";fi)'$CLR_END
+PS1_LOC=$CLR_BEG'42;1;33'$CLR_MID' \u'$CLR_BEG'37'$CLR_MID'@'$CLR_BEG'36'$CLR_MID'\H'$CLR_BEG'37'$CLR_MID':'$CLR_BEG'35'$CLR_MID'$PWD '$CLR_END
+PS1_PMT='\n'$CLR_BEG'1;31'$CLR_MID'\$'$CLR_END' '
+# system environments
+PS1_SHLVL=$CLR_BEG'43;1'$CLR_MID'$(if [ 1 -ne $SHLVL ]; then echo " \\$SHLVL=$SHLVL "; fi)'$CLR_END
+PS1_LOGIN=$CLR_BEG'43;1'$CLR_MID'$(shopt -q login_shell; if [ 0 -ne $? ]; then echo " non-login-shell "; fi)'$CLR_END
+PS1_GRP=$CLR_BEG'43;1'$CLR_MID'$(if [ "$(id -ng)" != "$(id -nu)" ]; then echo " effective-group:$(id -ng) "; fi)'$CLR_END
+# development environments
+PS1_PYVE=$CLR_BEG'44;1'$CLR_MID'$(if [ -n "$VIRTUAL_ENV" ]; then echo " py@$VIRTUAL_ENV ";fi)'$CLR_END
+GIT_PMT_LIST=(
+    '/usr/share/git-core/contrib/completion/git-prompt.sh'
+)
+for nIndex in ${!GIT_PMT_LIST[@]}; do \
+    if [ -f ${GIT_PMT_LIST[$nIndex]} ]; then \
+        source ${GIT_PMT_LIST[$nIndex]}; \
+        PS1_GIT=$CLR_BEG'45;1'$CLR_MID'$(__git_ps1 " %s ")'$CLR_END; \
+        break; \
+    fi \
+done
+# integration
+PS1=$PS1_RET$PS1_LOC$PS1_SHLVL$PS1_LOGIN$PS1_GRP$PS1_PYVE$PS1_GIT$PS1_PMT
+#unset GIT_PMT_LIST CLR_BEG CLR_MID CLR_END PS1_RET PS1_LOC PS1_PMT PS1_SHLVL PS1_LOGIN PS1_GRP PS1_PYVE PS1_GIT
+VIRTUAL_ENV_DISABLE_PROMPT=1
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWSTASHSTATE=1
+GIT_PS1_SHOWUNTRACKEDFILES=1
+GIT_PS1_SHOWUPSTREAM="verbose legacy git"
+GIT_PS1_DESCRIBE_STYLE=branch
+GIT_PS1_SHOWCOLORHINTS=1
