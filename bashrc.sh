@@ -25,7 +25,13 @@ alias .curl-header='curl -sv -o /dev/null'
 alias .bench-teddysun='curl https://raw.githubusercontent.com/teddysun/across/master/bench.sh | bash'
 alias .bench-freevps='curl https://freevps.us/downloads/bench.sh | bash'
 alias .pub-ip='curl -s -4 icanhazip.com'
+alias .pip-install='pip install -i https://pypi.tuna.tsinghua.edu.cn/simple'
 alias .git-log='git log --graph --all --decorate --oneline'
+
+# functions
+function .activate {
+    source $1/bin/activate
+}
 
 # colorful manpage
 export LESS_TERMCAP_mb=$'\E[01;31m'
