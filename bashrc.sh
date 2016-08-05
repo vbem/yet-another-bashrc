@@ -18,18 +18,18 @@ alias .systemctl='sudo systemctl --no-pager'
 alias .journalctl='sudo journalctl'
 alias .newgrp='newgrp -'
 alias .userdel='sudo userdel -rf'
-alias .date-md5='date +"%F %T %N" | md5sum '
-alias .grep-code='grep -E -v "^[[:space:]]*$|^[[:space:]]*#"'
-alias .nginx-reload='sudo nginx -t && sudo systemctl reload nginx'
-alias .curl-header='curl -sv -o /dev/null'
-alias .bench-teddysun='curl https://raw.githubusercontent.com/teddysun/across/master/bench.sh | bash'
-alias .bench-freevps='curl https://freevps.us/downloads/bench.sh | bash'
-alias .pub-ip='curl -s -4 icanhazip.com'
-alias .pip-install='pip install -i https://pypi.tuna.tsinghua.edu.cn/simple'
-alias .git-log='git log --graph --all --decorate --oneline'
+alias .grep.code='grep -E -v "^[[:space:]]*$|^[[:space:]]*#"'
+alias .nginx.reload='sudo nginx -t && sudo systemctl reload nginx'
+alias .curl.header='curl -sv -o /dev/null'
+alias .curl.bench.teddysun='curl https://raw.githubusercontent.com/teddysun/across/master/bench.sh | bash'
+alias .curl.bench.freevps='curl https://freevps.us/downloads/bench.sh | bash'
+alias .curl.ip='curl -s -4 icanhazip.com'
+alias .git.log='git log --graph --all --decorate --oneline'
+alias .pip.install='pip install -i https://pypi.tuna.tsinghua.edu.cn/simple'
+alais .py.ut='python -m unittest discover -v'
 
 # functions
-function .activate {
+function .source.activate {
     source $1/bin/activate
 }
 
