@@ -26,7 +26,7 @@ alias .curl.bench.freevps='curl https://freevps.us/downloads/bench.sh | bash'
 alias .curl.ip='curl -s -4 icanhazip.com'
 alias .git.log='git log --graph --all --decorate --oneline'
 alias .pip.install='pip install -i https://pypi.tuna.tsinghua.edu.cn/simple'
-alais .py.ut='python -m unittest discover -v'
+alias .py.ut='python -m unittest discover -v'
 
 # functions
 function .source.activate {
