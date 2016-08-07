@@ -25,8 +25,8 @@ alias .curl.bench.teddysun='curl https://raw.githubusercontent.com/teddysun/acro
 alias .curl.bench.freevps='curl https://freevps.us/downloads/bench.sh | bash'
 alias .curl.ip='curl -s -4 icanhazip.com'
 alias .git.log='git log --graph --all --decorate --oneline'
-alias .python.unittest='python -m unittest -c -v'
-alias .python.unittest.discover='python -m unittest discover -c -v'
+alias .python.unittest='python -m unittest -cvb'
+alias .python.unittest.discover='python -m unittest discover -cvb'
 alias .pip.install='pip install -i https://pypi.tuna.tsinghua.edu.cn/simple'
 
 # pyvenv & virtualenv
