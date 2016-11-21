@@ -28,6 +28,7 @@ alias .git.log='git log --graph --all --decorate --oneline'
 alias .python.unittest='python -m unittest -cvb'
 alias .python.unittest.discover='python -m unittest discover -cvb'
 alias .pip.install='pip install -i https://pypi.tuna.tsinghua.edu.cn/simple'
+alias .npm.taobao='npm --registry https://registry.npm.taobao.org'
 
 # pyvenv & virtualenv
 function .source.activate {
