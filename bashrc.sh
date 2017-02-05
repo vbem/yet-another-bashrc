@@ -67,7 +67,7 @@ PS1_LOGIN=$CLR_BEG'43;1'$CLR_MID'$(shopt -q login_shell; if [ 0 -ne $? ]; then e
 PS1_GRP=$CLR_BEG'43;1'$CLR_MID'$(if [ "$(id -ng)" != "$(id -nu)" ]; then echo " effective-group:$(id -ng) "; fi)'$CLR_END
 # development environments
 VIRTUAL_ENV_DISABLE_PROMPT=1
-PS1_PYVENV=$CLR_BEG'44'$CLR_MID'$(if [ -n "$VIRTUAL_ENV" ]; then echo " pyvenv:$VIRTUAL_ENV ";fi)'$CLR_END
+PS1_PYVENV=$CLR_BEG'44'$CLR_MID'$(if [ -n "$VIRTUAL_ENV" ]; then echo " PyEnv:$VIRTUAL_ENV ";fi)'$CLR_END
 GIT_PMT_LIST=(
     '/usr/share/git-core/contrib/completion/git-prompt.sh'
 )
