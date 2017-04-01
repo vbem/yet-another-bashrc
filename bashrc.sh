@@ -39,7 +39,7 @@ function .source.activate {
 }
 
 # pip bash completion
-source <(pip completion --bash > /dev/null/ 2>&1)
+source <(pip completion --bash > /dev/null 2>&1)
 
 # colorful manpage
 export LESS_TERMCAP_mb=$'\E[01;31m'
