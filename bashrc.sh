@@ -39,12 +39,7 @@ function .source.activate {
 }
 
 # pip bash completion
-_pip_completion() {
-    COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
-                   COMP_CWORD=$COMP_CWORD \
-                   PIP_AUTO_COMPLETE=1 $1 ) )
-}
-complete -o default -F _pip_completion pip
+source < (pip completion --bash > /dev/null/ 2>&1)
 
 # colorful manpage
 export LESS_TERMCAP_mb=$'\E[01;31m'
