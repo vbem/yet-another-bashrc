@@ -30,6 +30,9 @@ alias .python.unittest.discover='python -m unittest discover -cvb'
 alias .pip.install='pip install -i https://pypi.tuna.tsinghua.edu.cn/simple'
 alias .npm.taobao='npm --registry https://registry.npm.taobao.org'
 
+# aws-cli
+export AWS_DEFAULT_REGION='cn-north-1'
+
 # pyvenv & virtualenv
 function .source.activate {
     source $1/bin/activate
