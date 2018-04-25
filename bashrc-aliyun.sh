@@ -1,4 +1,5 @@
 # aliases
+alias .aliyun='aliyun configure set --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
 alias .ls='ls -alFh --time-style=long-iso --color=auto'
 alias .tree='tree -fiapughDFC --timefmt %F_%T --du --dirsfirst'
 alias .grep='grep -E -n --color=auto'
