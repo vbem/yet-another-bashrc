@@ -28,16 +28,10 @@ alias .python.unittest.discover='python -m unittest discover -cvb'
 alias .pip.install='pip install -i https://pypi.tuna.tsinghua.edu.cn/simple'
 alias .npm.taobao='npm --registry https://registry.npm.taobao.org'
 
-# aws-cli
-export AWS_DEFAULT_REGION='cn-north-1'
-
 # pyvenv & virtualenv
 function .source.activate {
     source $1/bin/activate
 }
-
-# pip bash completion
-source <(pip completion --bash 2> /dev/null)
 
 # colorful manpage
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -55,7 +49,7 @@ CLR_MID='m\]'
 CLR_END=$CLR_BEG'0'$CLR_MID
 # most fixed
 PS1_RET=$CLR_BEG'41;1'$CLR_MID'$(r=$?; if [ $r -ne 0 ]; then echo " \\$?=$r ";fi)'$CLR_END
-PS1_LOC=$CLR_BEG'42;1;33'$CLR_MID' \u'$CLR_BEG'37'$CLR_MID'@'$CLR_BEG'36'$CLR_MID'$(hostname -i)'$CLR_BEG'37'$CLR_MID':'$CLR_BEG'35'$CLR_MID'$PWD '$CLR_END
+PS1_LOC=$CLR_BEG'42;1;33'$CLR_MID' \u'$CLR_BEG'37'$CLR_MID'@'$CLR_BEG'36'$CLR_MID'$(hostname -i)'$CLR_BEG'37'$CLR_MID'(''\H'$CLR_MID')'$CLR_MID':'$CLR_BEG'35'$CLR_MID'$PWD '$CLR_END
 PS1_PMT='\n'$CLR_BEG'1;31'$CLR_MID'\$'$CLR_END' '
 # system environments
 PS1_SHLVL=$CLR_BEG'43;1'$CLR_MID'$(if [ 1 -ne $SHLVL ]; then echo " \\$SHLVL=$SHLVL "; fi)'$CLR_END
