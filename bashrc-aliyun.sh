@@ -1,5 +1,13 @@
 # aliases
 alias .aliyun='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
+alias .ecs.account='curl -s 100.100.100.200/latest/meta-data/owner-account-id'
+alias .ecs.region='curl -s 100.100.100.200/latest/meta-data/region-id'
+alias .ecs.zone='curl -s 100.100.100.200/latest/meta-data/zone-id'
+alias .ecs.account='curl -s 100.100.100.200/latest/meta-data/owner-account-id'
+alias .ecs.cidr='curl -s 100.100.100.200/latest/meta-data/vswitch-cidr-block'
+alias .ecs.hostname='curl -s 100.100.100.200/latest/meta-data/hostname'
+alias .ecs.id='curl -s 100.100.100.200/latest/meta-data/instance-id'
+alias .ecs.type='curl -s 100.100.100.200/latest/meta-data/instance/instance-type'
 alias .ecs.role='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/'
 alias .ecs.role.sts='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/$(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/)'
 alias .ecs.tags='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id) ecs DescribeInstances | jq ".Instances.Instance[]|select(.InstanceId==\"$(curl -s 100.100.100.200/latest/meta-data/instance-id)\").Tags.Tag"'
