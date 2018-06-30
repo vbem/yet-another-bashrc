@@ -7,7 +7,7 @@ alias .ec2.type='curl -s 169.254.169.254/latest/meta-data/instance-type'
 alias .ec2.localipv4='curl -s 169.254.169.254/latest/meta-data/local-ipv4'
 alias .ec2.publicipv4='curl -s 169.254.169.254/latest/meta-data/public-ipv4'
 alias .ec2.sg='curl -s 169.254.169.254/latest/meta-data/security-groups'
-alias .ec2.amiid='curl -s 169.254.169.254/latest/meta-data/ami-id''
+alias .ec2.amiid='curl -s 169.254.169.254/latest/meta-data/ami-id'
 alias .ec2.userdata='curl -s 169.254.169.254/latest/user-data'
 alias .ec2.tags='aws ec2 --region $(curl -s 169.254.169.254/latest/dynamic/instance-identity/document|jq -Mrc .region) describe-tags --filters Name=resource-id,Values=$(curl -s 169.254.169.254/latest/meta-data/instance-id) | jq -Mrc "[.Tags[]|{(.Key):.Value}]|add"'
 
