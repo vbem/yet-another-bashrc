@@ -1,15 +1,16 @@
 # aliases
-alias .ecs.account='curl -s 100.100.100.200/latest/meta-data/owner-account-id'
-alias .ecs.region='curl -s 100.100.100.200/latest/meta-data/region-id'
-alias .ecs.zone='curl -s 100.100.100.200/latest/meta-data/zone-id'
-alias .ecs.account='curl -s 100.100.100.200/latest/meta-data/owner-account-id'
-alias .ecs.cidr='curl -s 100.100.100.200/latest/meta-data/vswitch-cidr-block'
-alias .ecs.hostname='curl -s 100.100.100.200/latest/meta-data/hostname'
-alias .ecs.id='curl -s 100.100.100.200/latest/meta-data/instance-id'
-alias .ecs.type='curl -s 100.100.100.200/latest/meta-data/instance/instance-type'
-alias .ecs.role='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/'
-alias .ecs.sts='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/$(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/)'
-alias .ecs.tags='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id) ecs DescribeInstances | jq ".Instances.Instance[]|select(.InstanceId==\"$(curl -s 100.100.100.200/latest/meta-data/instance-id)\").Tags.Tag|[.[]|{(.TagKey):.TagValue}]|add"'
+alias .ec2.document='curl -s 169.254.169.254/latest/dynamic/instance-identity/document'
+alias .ec2.az='curl -s 169.254.169.254/latest/meta-data/placement/availability-zone'
+alias .ec2.role='curl -s 169.254.169.254/latest/meta-data/iam/security-credentials/'
+alias .ec2.id='curl -s 169.254.169.254/latest/meta-data/instance-id'
+alias .ec2.type='curl -s 169.254.169.254/latest/meta-data/instance-type'
+alias .ec2.localipv4='curl -s 169.254.169.254/latest/meta-data/local-ipv4'
+alias .ec2.publicipv4='curl -s 169.254.169.254/latest/meta-data/public-ipv4'
+alias .ec2.sg='curl -s 169.254.169.254/latest/meta-data/security-groups'
+alias .ec2.amiid='curl -s 169.254.169.254/latest/meta-data/ami-id''
+alias .ec2.userdata='curl -s 169.254.169.254/latest/user-data'
+alias .ec2.tags='aws ec2 --region $(curl -s 169.254.169.254/latest/dynamic/instance-identity/document|jq -Mrc .region) describe-tags --filters Name=resource-id,Values=$(curl -s 169.254.169.254/latest/meta-data/instance-id) | jq -Mrc "[.Tags[]|{(.Key):.Value}]|add"'
+
 alias .ls='ls -alFh --time-style=long-iso --color=auto'
 alias .tree='tree -fiapughDFC --timefmt %F_%T --du --dirsfirst'
 alias .grep='grep -E -n --color=auto'
@@ -56,7 +57,7 @@ CLR_MID='m\]'
 CLR_END=$CLR_BEG'0'$CLR_MID
 # most fixed
 PS1_RET=$CLR_BEG'41;1'$CLR_MID'$(r=$?; if [ $r -ne 0 ]; then echo " \\$?=$r ";fi)'$CLR_END
-PS1_LOC=$CLR_BEG'42;1;33'$CLR_MID' \u'$CLR_BEG'37'$CLR_MID'@'$CLR_BEG'33'$CLR_MID'$(hostname -i)'$CLR_BEG'37'$CLR_MID'~'$CLR_BEG'34'$CLR_MID'\H'$CLR_BEG'37'$CLR_MID':'$CLR_BEG'35'$CLR_MID'$PWD '$CLR_END
+PS1_LOC=$CLR_BEG'42;1;33'$CLR_MID' \u'$CLR_BEG'37'$CLR_MID'@'$CLR_BEG'33'$CLR_MID'$(hostname -i)'$CLR_BEG'37'$CLR_MID':'$CLR_BEG'35'$CLR_MID'$PWD '$CLR_END
 PS1_PMT='\n'$CLR_BEG'1;31'$CLR_MID'\$'$CLR_END' '
 # system environments
 PS1_SHLVL=$CLR_BEG'43;1'$CLR_MID'$(if [ 1 -ne $SHLVL ]; then echo " \\$SHLVL=$SHLVL "; fi)'$CLR_END
