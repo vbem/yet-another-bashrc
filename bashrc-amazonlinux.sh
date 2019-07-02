@@ -57,7 +57,7 @@ CLR_MID='m\]'
 CLR_END=$CLR_BEG'0'$CLR_MID
 # most fixed
 PS1_RET=$CLR_BEG'41;1'$CLR_MID'$(r=$?; if [ $r -ne 0 ]; then echo " \\$?=$r ";fi)'$CLR_END
-PS1_LOC=$CLR_BEG'42;1;33'$CLR_MID' \u'$CLR_BEG'37'$CLR_MID'@'$CLR_BEG'33'$CLR_MID'$(hostname -i)'$CLR_BEG'37'$CLR_MID':'$CLR_BEG'35'$CLR_MID'$PWD '$CLR_END
+PS1_LOC=$CLR_BEG'42;1;33'$CLR_MID' \u'$CLR_BEG'37'$CLR_MID'@'$CLR_BEG'33'$CLR_MID'$(hostname --all-ip-addresses)'$CLR_BEG'37'$CLR_MID':'$CLR_BEG'35'$CLR_MID'$PWD '$CLR_END
 PS1_PMT='\n'$CLR_BEG'1;31'$CLR_MID'\$'$CLR_END' '
 # system environments
 PS1_SHLVL=$CLR_BEG'43;1'$CLR_MID'$(if [ 1 -ne $SHLVL ]; then echo " \\$SHLVL=$SHLVL "; fi)'$CLR_END
