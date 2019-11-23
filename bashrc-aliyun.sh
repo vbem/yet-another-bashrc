@@ -1,3 +1,5 @@
+# ver: 2019.11.23.0
+
 # aliases
 alias .aliyun='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
 alias .ecs.account='curl -s 100.100.100.200/latest/meta-data/owner-account-id'
@@ -54,6 +56,9 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
+# hostname --all-ip-addresses
+export HOSTNAME_ALL_IP_ADDRESSES=$(echo $(hostname --all-ip-addresses))
+
 # PS1
 #color wrapper
 CLR_BEG='\[\e['
@@ -61,7 +66,7 @@ CLR_MID='m\]'
 CLR_END=$CLR_BEG'0'$CLR_MID
 # most fixed
 PS1_RET=$CLR_BEG'41;1'$CLR_MID'$(r=$?; if [ $r -ne 0 ]; then echo " \\$?=$r ";fi)'$CLR_END
-PS1_LOC=$CLR_BEG'42;1;33'$CLR_MID' \u'$CLR_BEG'37'$CLR_MID'@'$CLR_BEG'33'$CLR_MID'$(hostname --all-ip-addresses)'$CLR_BEG'37'$CLR_MID'~'$CLR_BEG'34'$CLR_MID'\H'$CLR_BEG'37'$CLR_MID':'$CLR_BEG'35'$CLR_MID'$PWD '$CLR_END
+PS1_LOC=$CLR_BEG'40;1;35'$CLR_MID' \u'$CLR_BEG'30'$CLR_MID'@'$CLR_BEG'32'$CLR_MID'$HOSTNAME_ALL_IP_ADDRESSES'$CLR_BEG'30'$CLR_MID'@'$CLR_BEG'34'$CLR_MID'\H'$CLR_BEG'30'$CLR_MID':'$CLR_BEG'33'$CLR_MID'$PWD '$CLR_END
 PS1_PMT='\n'$CLR_BEG'1;31'$CLR_MID'\$'$CLR_END' '
 # system environments
 PS1_SHLVL=$CLR_BEG'43;1'$CLR_MID'$(if [ 1 -ne $SHLVL ]; then echo " \\$SHLVL=$SHLVL "; fi)'$CLR_END
