@@ -1,4 +1,4 @@
-# ver: 2019.11.23.0
+# ver: 2019.11.27.0
 
 # aliases
 alias .aliyun='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
