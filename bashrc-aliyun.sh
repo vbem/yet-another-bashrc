@@ -2,7 +2,7 @@
 
 # aliases
 alias .aliyun='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
-alias .aliyun.configure='aliyun configure set --profile default --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
+alias .aliyun.configure.ecsrole='aliyun configure set --profile default --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
 alias .ecs.account='curl -s 100.100.100.200/latest/meta-data/owner-account-id'
 alias .ecs.region='curl -s 100.100.100.200/latest/meta-data/region-id'
 alias .ecs.zone='curl -s 100.100.100.200/latest/meta-data/zone-id'
