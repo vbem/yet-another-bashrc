@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -l
+#!/usr/bin/env bash
 # @version: 2020.2.29
 
 if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
