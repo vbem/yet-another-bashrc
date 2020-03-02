@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# @version: 2020.3.1
+# @version: 2020.3.2
 
 if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
@@ -9,6 +9,10 @@ YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
 if [ ! -v AWS_DEFAULT_REGION ]; then
     export AWS_DEFAULT_REGION=$(curl -s 169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
 fi
+
+# bash cmd history
+export HISTTIMEFORMAT="%F_%T "
+[ -n "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
 
 if [[ $- == *i* ]]; then # interactive shell
 
