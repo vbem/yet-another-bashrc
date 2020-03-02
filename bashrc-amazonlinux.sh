@@ -40,7 +40,6 @@ if [[ $- == *i* ]]; then # interactive shell
     alias .ec2.tags='aws ec2 --region $(curl -s 169.254.169.254/latest/dynamic/instance-identity/document|jq -Mrc .region) describe-tags --filters Name=resource-id,Values=$(curl -s 169.254.169.254/latest/meta-data/instance-id) | jq -Mrc "[.Tags[]|{(.Key):.Value}]|add"'
 
     # cmd aliases
-    alias .os='echo $(source /etc/os-release && echo $PRETTY_NAME)'
     alias .ls='ls -alFh --time-style=long-iso --color=auto'
     alias .tree='tree -fiapughDFC --timefmt %F_%T --du --dirsfirst'
     alias .grep='grep -E -n --color=auto'
