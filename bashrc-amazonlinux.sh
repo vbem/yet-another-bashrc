@@ -64,6 +64,19 @@ if [[ $- == *i* ]]; then # interactive shell
 
     # PS1
 
+    # OS nickname
+    if [ -f /etc/os-release ]; then
+        OS_NICKNAME=$(source /etc/os-release && echo $ID-$VERSION_ID)
+    elif [ -n "$(which lsb_release 2> /dev/null)" ]; then
+        OS_NICKNAME=$(lsb_release -is)-$(lsb_release -rs)
+    elif [ -f /etc/system-release-cpe ]; then
+        OS_NICKNAME=$(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')
+    elif [ -f /etc/system-release ]; then
+        OS_NICKNAME=$(cat /etc/system-release)
+    else
+        OS_NICKNAME="unknown-os"
+    fi;
+
     # EC2 nickname
     EC2_ID=$(curl -s 169.254.169.254/latest/meta-data/instance-id)
     EC2_REGION=$(curl -s 169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
@@ -78,7 +91,7 @@ if [[ $- == *i* ]]; then # interactive shell
 
     # most fixed
     PS1_RET=$CLR_BEG'41;1'$CLR_MID'$(r=$?; if [ $r -ne 0 ]; then echo " \\$?=$r ";fi)'$CLR_END
-    PS1_LOC=$CLR_BEG'40;1;35'$CLR_MID' \u'$CLR_BEG'30'$CLR_MID'@'$CLR_BEG'32'$CLR_MID"$(echo $(hostname --all-ip-addresses))"$CLR_BEG'30'$CLR_MID'@'$CLR_BEG'34'$CLR_MID"$EC2_NICKNAME"$CLR_BEG'30'$CLR_MID':'$CLR_BEG'33'$CLR_MID'$PWD '$CLR_END
+    PS1_LOC=$CLR_BEG'37;100'$CLR_MID" $OS_NICKNAME"$CLR_BEG'95;1'$CLR_MID' \u'$CLR_BEG'30'$CLR_MID'@'$CLR_BEG'32'$CLR_MID"$(echo $(hostname --all-ip-addresses))"$CLR_BEG'30'$CLR_MID'@'$CLR_BEG'34'$CLR_MID"$EC2_NICKNAME"$CLR_BEG'30'$CLR_MID':'$CLR_BEG'33'$CLR_MID'$PWD '$CLR_END
     PS1_PMT='\n'$CLR_BEG'1;31'$CLR_MID'\$'$CLR_END' '
 
     # system environments
