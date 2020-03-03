@@ -67,7 +67,6 @@ if [[ $- == *i* ]]; then # interactive shell
 
     # vars
     EC2_ID=$(curl -s 169.254.169.254/latest/meta-data/instance-id)
-    EC2_IP_ALL=$(echo $(hostname --all-ip-addresses))
     EC2_REGION=$(curl -s 169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
     EC2_TAGS_ORI=$(aws ec2 --region $EC2_REGION describe-tags --filters Name=resource-id,Values=$EC2_ID 2> /dev/null)
     [ -z "$EC2_TAGS_ORI" ] && EC2_TAG_NAME=null || EC2_TAG_NAME=$(echo $EC2_TAGS_ORI |  jq -Mrc "[.Tags[]|{(.Key):.Value}]|add|.Name")
@@ -91,7 +90,7 @@ if [[ $- == *i* ]]; then # interactive shell
     x1=$a'2;90;40'$b
 
     # parts
-    PS1_LOC=$a'95;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'3;32;40'$b"$EC2_IP_ALL"$x1'@'$a'4;34;40'$b"$EC2_NICKNAME"$x1':'$a'1;33;40'$b'$PWD '$c
+    PS1_LOC=$a'95;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'3;32;40'$b"$(echo $(hostname --all-ip-addresses))"$x1'@'$a'4;34;40'$b"$EC2_NICKNAME"$x1':'$a'1;33;40'$b'$PWD '$c
     PS1_PMT='\n'$a'1;31'$b'\$'$c' '
     PS1_RET=$a'1;97;41'$b'$(r=$?; [ $r -ne 0 ] && echo " \\$?=$r ")'$c
     PS1_SHLVL=$a'1;97;43'$b'$([ 1 -ne $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c
@@ -124,7 +123,7 @@ if [[ $- == *i* ]]; then # interactive shell
     PS1=$PS1_RET$PS1_SHLVL$PS1_LOGIN$PS1_PYVENV$PS1_GIT$PS1_OS$PS1_LOC$PS1_PMT
 
     # clear
-    unset EC2_ID EC2_IP_ALL EC2_REGION EC2_TAGS_ORI EC2_TAG_NAME EC2_NICKNAME
+    unset EC2_ID EC2_REGION EC2_TAGS_ORI EC2_TAG_NAME EC2_NICKNAME OS_NICKNAME
     unset a b c x1
     unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_SHLVL PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
 
