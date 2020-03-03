@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# @version: 2020.3.2
+# @version: 2020.3.3
 
 if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
@@ -62,9 +62,15 @@ if [[ $- == *i* ]]; then # interactive shell
     alias .curl.ip='curl -s -4 icanhazip.com'
     alias .git.log='git log --graph --all --decorate --oneline'
 
-    # PS1
+    # for PS1
 
-    # OS nickname
+    # vars
+    EC2_ID=$(curl -s 169.254.169.254/latest/meta-data/instance-id)
+    EC2_IP_ALL=$(echo $(hostname --all-ip-addresses))
+    EC2_REGION=$(curl -s 169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
+    EC2_TAGS_ORI=$(aws ec2 --region $EC2_REGION describe-tags --filters Name=resource-id,Values=$EC2_ID 2> /dev/null)
+    [ -z "$EC2_TAGS_ORI" ] && EC2_TAG_NAME=null || EC2_TAG_NAME=$(echo $EC2_TAGS_ORI |  jq -Mrc "[.Tags[]|{(.Key):.Value}]|add|.Name")
+    [ "null" == "$EC2_TAG_NAME" ] && EC2_NICKNAME=$EC2_ID || EC2_NICKNAME=$EC2_TAG_NAME
     if [ -f /etc/os-release ]; then
         OS_NICKNAME=$(source /etc/os-release && echo $ID-$VERSION_ID)
     elif [ -n "$(which lsb_release 2> /dev/null)" ]; then
@@ -77,51 +83,49 @@ if [[ $- == *i* ]]; then # interactive shell
         OS_NICKNAME="unknown-os"
     fi;
 
-    # EC2 nickname
-    EC2_ID=$(curl -s 169.254.169.254/latest/meta-data/instance-id)
-    EC2_REGION=$(curl -s 169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
-    EC2_TAGS_ORI=$(aws ec2 --region $EC2_REGION describe-tags --filters Name=resource-id,Values=$EC2_ID 2> /dev/null)
-    [ -z "$EC2_TAGS_ORI" ] && EC2_TAG_NAME=null || EC2_TAG_NAME=$(echo $EC2_TAGS_ORI |  jq -Mrc "[.Tags[]|{(.Key):.Value}]|add|.Name")
-    [ "null" == "$EC2_TAG_NAME" ] && EC2_NICKNAME=$EC2_ID || EC2_NICKNAME=$EC2_TAG_NAME
+    #color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
+    a='\[\e[0m\]\[\e['
+    b='m\]'
+    c=$a'0'$b
+    x1=$a'2;90;40'$b
 
-    #color wrapper
-    CLR_BEG='\[\e['
-    CLR_MID='m\]'
-    CLR_END=$CLR_BEG'0'$CLR_MID
+    # parts
+    PS1_LOC=$a'95;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'3;32;40'$b"$EC2_IP_ALL"$x1'@'$a'4;34;40'$b"$EC2_NICKNAME"$x1':'$a'1;33;40'$b'$PWD '$c
+    PS1_PMT='\n'$a'1;31'$b'\$'$c' '
+    PS1_RET=$a'1;97;41'$b'$(r=$?; [ $r -ne 0 ] && echo " \\$?=$r ")'$c
+    PS1_SHLVL=$a'1;97;43'$b'$([ 1 -ne $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c
+    PS1_LOGIN=$a'1;97;45'$b'$(shopt -q login_shell; [ 0 -ne $? ] && echo " non-login ")'$c
+    PS1_OS=$a'3;37;100'$b" $OS_NICKNAME "$c
 
-    # most fixed
-    PS1_RET=$CLR_BEG'41;1'$CLR_MID'$(r=$?; if [ $r -ne 0 ]; then echo " \\$?=$r ";fi)'$CLR_END
-    PS1_LOC=$CLR_BEG'37;100'$CLR_MID" $OS_NICKNAME"$CLR_BEG'95;1'$CLR_MID' \u'$CLR_BEG'30'$CLR_MID'@'$CLR_BEG'32'$CLR_MID"$(echo $(hostname --all-ip-addresses))"$CLR_BEG'30'$CLR_MID'@'$CLR_BEG'34'$CLR_MID"$EC2_NICKNAME"$CLR_BEG'30'$CLR_MID':'$CLR_BEG'33'$CLR_MID'$PWD '$CLR_END
-    PS1_PMT='\n'$CLR_BEG'1;31'$CLR_MID'\$'$CLR_END' '
-
-    # system environments
-    PS1_SHLVL=$CLR_BEG'43;1'$CLR_MID'$(if [ 1 -ne $SHLVL ]; then echo " \\$SHLVL=$SHLVL "; fi)'$CLR_END
-    PS1_LOGIN=$CLR_BEG'43;1'$CLR_MID'$(shopt -q login_shell; if [ 0 -ne $? ]; then echo " non-login-shell "; fi)'$CLR_END
-    PS1_GRP=$CLR_BEG'43;1'$CLR_MID'$(if [ "$(id -ng)" != "$(id -nu)" ]; then echo " effective-group:$(id -ng) "; fi)'$CLR_END
-
-    # development environments
+    # python venv
     VIRTUAL_ENV_DISABLE_PROMPT=1
-    PS1_PYVENV=$CLR_BEG'44'$CLR_MID'$(if [ -n "$VIRTUAL_ENV" ]; then echo " PyEnv:$VIRTUAL_ENV ";fi)'$CLR_END
+    PS1_PYVENV=$a'3;97;42'$b'$([ -n "$VIRTUAL_ENV" ] && echo " PyEnv:$VIRTUAL_ENV ")'$c
+    
+    # git
     GIT_PMT_LIST=(
         '/usr/share/git-core/contrib/completion/git-prompt.sh'
     )
-    for nIndex in ${!GIT_PMT_LIST[@]}; do \
-        if [ -f ${GIT_PMT_LIST[$nIndex]} ]; then \
-            GIT_PS1_SHOWDIRTYSTATE=1 \
-            GIT_PS1_SHOWSTASHSTATE=1 \
-            GIT_PS1_SHOWUNTRACKEDFILES=1 \
-            GIT_PS1_SHOWUPSTREAM="verbose legacy git" \
-            GIT_PS1_DESCRIBE_STYLE=branch \
-            GIT_PS1_SHOWCOLORHINTS=1 \
-            source ${GIT_PMT_LIST[$nIndex]}; \
-            PS1_GIT=$CLR_BEG'45'$CLR_MID'$(__git_ps1 " %s ")'$CLR_END; \
-            break; \
-        fi \
+    for nIndex in ${!GIT_PMT_LIST[@]}; do 
+        if [ -f ${GIT_PMT_LIST[$nIndex]} ]; then 
+            GIT_PS1_SHOWDIRTYSTATE=1; 
+            GIT_PS1_SHOWSTASHSTATE=1; 
+            GIT_PS1_SHOWUNTRACKEDFILES=1; 
+            GIT_PS1_SHOWUPSTREAM="verbose legacy git"; 
+            GIT_PS1_DESCRIBE_STYLE=branch; 
+            GIT_PS1_SHOWCOLORHINTS=1; 
+            source ${GIT_PMT_LIST[$nIndex]}; 
+            PS1_GIT=$a'1;3;97;104'$b'$(__git_ps1 " %s ")'$c; 
+            break; 
+        fi 
     done
-    PS1=$PS1_RET$PS1_SHLVL$PS1_LOGIN$PS1_GRP$PS1_PYVENV$PS1_GIT$PS1_LOC$PS1_PMT
+    
+    # all
+    PS1=$PS1_RET$PS1_SHLVL$PS1_LOGIN$PS1_PYVENV$PS1_GIT$PS1_OS$PS1_LOC$PS1_PMT
 
-    unset EC2_ID EC2_REGION EC2_TAGS_ORI EC2_TAG_NAME EC2_NICKNAME
-    unset GIT_PMT_LIST CLR_BEG CLR_MID CLR_END PS1_RET PS1_LOC PS1_PMT PS1_SHLVL PS1_LOGIN PS1_GRP PS1_PYVENV PS1_GIT
+    # clear
+    unset EC2_ID EC2_IP_ALL EC2_REGION EC2_TAGS_ORI EC2_TAG_NAME EC2_NICKNAME
+    unset a b c x1
+    unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_SHLVL PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
 
 fi # interactive shell
 
