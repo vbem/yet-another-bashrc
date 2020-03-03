@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# @spec: amazonlinux
 # @version: 2020.3.3
 
 if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
