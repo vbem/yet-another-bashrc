@@ -66,11 +66,18 @@ if [[ $- == *i* ]]; then # interactive shell
     # for PS1
 
     # vars
-    EC2_ID=$(curl -s 169.254.169.254/latest/meta-data/instance-id)
     EC2_REGION=$(curl -s 169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
-    EC2_TAGS_ORI=$(aws ec2 --region $EC2_REGION describe-tags --filters Name=resource-id,Values=$EC2_ID 2> /dev/null)
-    [ -z "$EC2_TAGS_ORI" ] && EC2_TAG_NAME=null || EC2_TAG_NAME=$(echo $EC2_TAGS_ORI |  jq -Mrc "[.Tags[]|{(.Key):.Value}]|add|.Name")
-    [ "null" == "$EC2_TAG_NAME" ] && EC2_NICKNAME=$EC2_ID || EC2_NICKNAME=$EC2_TAG_NAME
+    EC2_ID=$(curl -s 169.254.169.254/latest/meta-data/instance-id)
+    EC2_NICKNAME=$EC2_ID # init value
+
+    if [ "$(which aws 2> /dev/null)" ] && [ "$(which jq 2> /dev/null)" ]; then
+        EC2_TAGS_ORI=$(aws ec2 --region $EC2_REGION describe-tags --filters Name=resource-id,Values=$EC2_ID 2> /dev/null)
+        if [ "$EC2_TAGS_ORI" ]; then
+            EC2_TAG_NAME=$(echo $EC2_TAGS_ORI |  jq -Mrc "[.Tags[]|{(.Key):.Value}]|add|.Name")
+            [ "null" != "$EC2_TAG_NAME" ] && EC2_NICKNAME=$EC2_TAG_NAME
+        fi
+    fi
+
     if [ -f /etc/os-release ]; then
         OS_NICKNAME=$(source /etc/os-release && echo $ID-$VERSION_ID)
     elif [ -n "$(which lsb_release 2> /dev/null)" ]; then
