@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # @spec: amazonlinux
-# @version: 2020.3.3
+# @version: 2020.3.4
 
 if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
