@@ -6,10 +6,11 @@ if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# set region env if not set
-#if [ ! -v REGION ]; then
-#    export REGION=$(curl -s 100.100.100.200/latest/meta-data/region-id)
-#fi
+# set region env if not set 
+# https://github.com/aliyun/aliyun-cli/blob/master/config/profile.go
+if [ ! -v REGION ]; then
+    export REGION=$(curl -s 100.100.100.200/latest/meta-data/region-id)
+fi
 
 # bash cmd history
 export HISTTIMEFORMAT="%F_%T "
