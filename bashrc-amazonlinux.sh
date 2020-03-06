@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # @spec: amazonlinux
-# @version: 2020.3.4
+# @version: 2020.3.6
 
 if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
@@ -13,7 +13,7 @@ fi
 
 # bash cmd history
 export HISTTIMEFORMAT="%F_%T "
-[ -n "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
+[ "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
 
 if [[ $- == *i* ]]; then # interactive shell
 
@@ -80,7 +80,7 @@ if [[ $- == *i* ]]; then # interactive shell
 
     if [ -f /etc/os-release ]; then
         OS_NICKNAME=$(source /etc/os-release && echo $ID-$VERSION_ID)
-    elif [ -n "$(which lsb_release 2> /dev/null)" ]; then
+    elif [ "$(which lsb_release 2> /dev/null)" ]; then
         OS_NICKNAME=$(lsb_release -is)-$(lsb_release -rs)
     elif [ -f /etc/system-release-cpe ]; then
         OS_NICKNAME=$(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')
@@ -106,7 +106,7 @@ if [[ $- == *i* ]]; then # interactive shell
 
     # python venv
     VIRTUAL_ENV_DISABLE_PROMPT=1
-    PS1_PYVENV=$a'3;97;42'$b'$([ -n "$VIRTUAL_ENV" ] && echo " PyEnv:$VIRTUAL_ENV ")'$c
+    PS1_PYVENV=$a'3;97;42'$b'$([ "$VIRTUAL_ENV" ] && echo " PyEnv:$VIRTUAL_ENV ")'$c
     
     # git
     GIT_PMT_LIST=(
