@@ -6,17 +6,25 @@ if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# set region env if not set 
-# https://github.com/aliyun/aliyun-cli/blob/master/config/profile.go
-if [ ! -v REGION ]; then
-    export REGION=$(curl -s 100.100.100.200/latest/meta-data/region-id)
-fi
-
 # bash cmd history
 export HISTTIMEFORMAT="%F_%T "
 [ -n "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
 
 if [[ $- == *i* ]]; then # interactive shell
+
+    # aliyun-cli installed
+    if [ "$(which aliyun 2> /dev/null)" ]; then    
+        # enable auto completion
+        complete -C $(which aliyun) aliyun
+    
+        # trick: https://github.com/aliyun/aliyun-cli/blob/master/config/profile.go
+        [ ! -v REGION ] && export REGION=$(curl -s 100.100.100.200/latest/meta-data/region-id)
+    
+        # aliases
+        alias .aliyun='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
+        alias .aliyun.configure='aliyun configure set --profile default --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
+        
+    fi
 
     # colorful manpage
     export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -39,10 +47,6 @@ if [[ $- == *i* ]]; then # interactive shell
     alias .ecs.role='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/'
     alias .ecs.sts='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/$(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/)'
     alias .ecs.tags='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id) ecs DescribeInstances --InstanceIds ["\"$(curl -s 100.100.100.200/latest/meta-data/instance-id)\""] | jq -Mcr "[.Instances.Instance[].Tags.Tag[]|{(.TagKey):.TagValue}]|add"'
-
-    # aliyun cli aliases
-    alias .aliyun='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
-    alias .aliyun.configure='aliyun configure set --profile default --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
 
     # cmd aliases
     alias .ls='ls -alFh --time-style=long-iso --color=auto'
