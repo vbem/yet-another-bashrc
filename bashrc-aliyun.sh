@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # @spec: aliyun
-# @version: 2020.3.3
+# @version: 2020.3.6
 
 if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
@@ -23,7 +23,6 @@ if [[ $- == *i* ]]; then # interactive shell
         # aliases
         alias .aliyun.use.role='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
         alias .aliyun.set.role='aliyun configure set --profile default --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
-        
     fi
 
     # colorful manpage
