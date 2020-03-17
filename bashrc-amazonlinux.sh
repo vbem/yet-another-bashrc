@@ -6,6 +6,9 @@ if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+# see `man systemctl`
+export SYSTEMD_PAGER=
+
 # set aws region env if not set
 if [ ! -v AWS_DEFAULT_REGION ]; then
     export AWS_DEFAULT_REGION=$(curl -s 169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
