@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # @spec: amazonlinux
-# @version: 2020.4.5
+# @version: 2020.4.22
 
 if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
@@ -22,6 +22,11 @@ export HISTTIMEFORMAT="%F_%T "
 [ "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
 
 if [[ $- == *i* ]]; then # interactive shell
+    
+    # kubectl installed
+    if [ "$(which kubectl 2> /dev/null)" ]; then
+        source <(kubectl completion bash)
+    fi
 
     # colorful manpage
     export LESS_TERMCAP_mb=$'\E[01;31m'
