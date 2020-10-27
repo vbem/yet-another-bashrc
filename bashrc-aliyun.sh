@@ -81,8 +81,10 @@ if [[ $- == *i* ]]; then # interactive shell
     alias .curl.ip='curl -s -4 icanhazip.com'
     alias .git.log='git log --graph --all --decorate --oneline'
     alias .venv.clear='python3 -m venv --clear'
-    
     function .venv.activate { . $1/bin/activate; }
+    alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
+    alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
+    alias .pip3.freeze='pip3 --disable-pip-version-check freeze'
 
     # for PS1
 
