@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # @spec: aliyun
-# @version: 2020.4.22
+# @version: 2020.10.27
 
 if [ ! -v YET_ANOTHER_BASHRC ]; then # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
@@ -80,6 +80,9 @@ if [[ $- == *i* ]]; then # interactive shell
     alias .curl.header='curl -sv -o /dev/null'
     alias .curl.ip='curl -s -4 icanhazip.com'
     alias .git.log='git log --graph --all --decorate --oneline'
+    alias .venv.clear='python3 -m venv --clear'
+    
+    function .venv.activate { . $1/bin/activate; }
 
     # for PS1
 
@@ -112,7 +115,7 @@ if [[ $- == *i* ]]; then # interactive shell
 
     # python venv
     VIRTUAL_ENV_DISABLE_PROMPT=1
-    PS1_PYVENV=$a'3;97;42'$b'$([ "$VIRTUAL_ENV" ] && echo " PyEnv:$VIRTUAL_ENV ")'$c
+    PS1_PYVENV=$a'3;97;42'$b'$([ "$VIRTUAL_ENV" ] && echo " venv@$VIRTUAL_ENV ")'$c
     
     # git
     GIT_PMT_LIST=(
