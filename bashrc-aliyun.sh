@@ -85,7 +85,7 @@ if [[ $- == *i* ]]; then # interactive shell
     alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
     alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
     alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
-    alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic'
+    alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
 
     # for PS1
 
