@@ -60,7 +60,7 @@ if [[ $- == *i* ]]; then # interactive shell
 
     # cmd aliases
     alias .ls='ls -alFh --time-style=long-iso --color=auto'
-    alias .tree='tree -fiapughDFC --timefmt %F_%T --du --dirsfirst'
+    alias .tree='tree -fiapughDFCN --timefmt %F_%T --du --dirsfirst'
     alias .grep='grep -E -n --color=auto'
     alias .diff='diff -y'
     alias .df='df -h'
