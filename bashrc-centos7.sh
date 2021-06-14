@@ -45,6 +45,7 @@ export HISTTIMEFORMAT="%F_%T "
 [ "$(which aliyun 2> /dev/null)" ] && complete -C $(which aliyun) aliyun
 [ "$(which helm 2> /dev/null)" ] && source <(helm completion bash)
 [ "$(which yq 2> /dev/null)" ] && source <(yq shell-completion bash)
+[ "$(which rclone 2> /dev/null)" ] && source <(rclone -q genautocomplete bash -)
 
 # colorful manpage
 export LESS_TERMCAP_mb=$'\E[01;31m'
