@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # @name: yet-another-bashrc
-# @spec: centos7
-# @version: 2021.06.14
+# @spec: centos
+# @version: 2021.06.19
 
 # Loading order of bashrc (see 'man bash')
 # if login shell
@@ -56,7 +56,7 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-# cmd aliases
+# common aliases
 alias .ls='ls -alFh --time-style=long-iso --color=auto'
 alias .tree='tree -fiapughDFCN --timefmt %F_%T --du --dirsfirst'
 alias .grep='grep -E -n --color=auto'
@@ -85,6 +85,36 @@ alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
 alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
 alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
 
+# cloud aliases
+if timeout 0.01 ping -c1 100.100.100.200 > /dev/null; then
+    alias .aliyun.use.role='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
+    alias .aliyun.set.role='aliyun configure set --profile default --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
+    alias .ecs.account='curl -s 100.100.100.200/latest/meta-data/owner-account-id'
+    alias .ecs.region='curl -s 100.100.100.200/latest/meta-data/region-id'
+    alias .ecs.zone='curl -s 100.100.100.200/latest/meta-data/zone-id'
+    alias .ecs.account='curl -s 100.100.100.200/latest/meta-data/owner-account-id'
+    alias .ecs.cidr='curl -s 100.100.100.200/latest/meta-data/vswitch-cidr-block'
+    alias .ecs.hostname='curl -s 100.100.100.200/latest/meta-data/hostname'
+    alias .ecs.id='curl -s 100.100.100.200/latest/meta-data/instance-id'
+    alias .ecs.type='curl -s 100.100.100.200/latest/meta-data/instance/instance-type'
+    alias .ecs.role='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/'
+    alias .ecs.sts='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/$(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/)'
+    alias .ecs.tags='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id) ecs DescribeInstances --InstanceIds ["\"$(curl -s 100.100.100.200/latest/meta-data/instance-id)\""] | jq -Mcr "[.Instances.Instance[].Tags.Tag[]|{(.TagKey):.TagValue}]|add"'
+elif timeout 0.01 ping -c1 169.254.169.25 > /dev/null; then
+    alias .ec2.document='curl -s 169.254.169.254/latest/dynamic/instance-identity/document'
+    alias .ec2.region="curl -s 169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//'"
+    alias .ec2.az='curl -s 169.254.169.254/latest/meta-data/placement/availability-zone'
+    alias .ec2.role='curl -s 169.254.169.254/latest/meta-data/iam/security-credentials/'
+    alias .ec2.id='curl -s 169.254.169.254/latest/meta-data/instance-id'
+    alias .ec2.type='curl -s 169.254.169.254/latest/meta-data/instance-type'
+    alias .ec2.localipv4='curl -s 169.254.169.254/latest/meta-data/local-ipv4'
+    alias .ec2.publicipv4='curl -s 169.254.169.254/latest/meta-data/public-ipv4'
+    alias .ec2.sg='curl -s 169.254.169.254/latest/meta-data/security-groups'
+    alias .ec2.amiid='curl -s 169.254.169.254/latest/meta-data/ami-id'
+    alias .ec2.userdata='curl -s 169.254.169.254/latest/user-data'
+    alias .ec2.tags='aws ec2 --region $(curl -s 169.254.169.254/latest/dynamic/instance-identity/document|jq -Mrc .region) describe-tags --filters Name=resource-id,Values=$(curl -s 169.254.169.254/latest/meta-data/instance-id) | jq -Mrc "[.Tags[]|{(.Key):.Value}]|add"'
+fi
+
 # for PS1
 
 # vars
@@ -98,7 +128,7 @@ elif [ -f /etc/system-release ]; then
     OS_NICKNAME=$(cat /etc/system-release)
 else
     OS_NICKNAME="unknown-os"
-fi;
+fi
 
 #color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
 a='\[\e[0m\]\[\e['
