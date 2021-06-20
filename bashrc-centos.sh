@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # @name: yet-another-bashrc
 # @spec: centos
-# @version: 2021.06.19
+# @version: 2021.06.20
 
 # Loading order of bashrc (see 'man bash')
 # if login shell
@@ -118,7 +118,9 @@ fi
 # for PS1
 
 # vars
-if [ -f /etc/os-release ]; then
+if [ "$WSL_DISTRO_NAME" ]; then
+    OS_NICKNAME=WSL-$WSL_DISTRO_NAME
+elif [ -f /etc/os-release ]; then
     OS_NICKNAME=$(source /etc/os-release && echo $ID-$VERSION_ID)
 elif [ "$(which lsb_release 2> /dev/null)" ]; then
     OS_NICKNAME=$(lsb_release -is)-$(lsb_release -rs)
@@ -140,7 +142,11 @@ x1=$a'2;90;40'$b
 PS1_LOC=$a'95;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'3;32;40'$b"$(echo $(hostname --all-ip-addresses))"$x1'@'$a'4;34;40'$b'\H'$x1':'$a'1;33;40'$b'$PWD '$c
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 PS1_RET=$a'1;97;41'$b'$(r=$?; [ $r -ne 0 ] && echo " \\$?=$r ")'$c
-PS1_SHLVL=$a'1;97;43'$b'$([ 1 -ne $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c
+if [ "$DISPLAY" -a "$WSL_DISTRO_NAME" ]; then # in WSL and MobaXterm
+    PS1_SHLVL=$a'1;97;43'$b'$([ 2 -lt $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c
+else
+    PS1_SHLVL=$a'1;97;43'$b'$([ 1 -ne $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c
+fi
 PS1_LOGIN=$a'1;97;45'$b'$(shopt -q login_shell; [ 0 -ne $? ] && echo " non-login ")'$c
 PS1_OS=$a'3;37;100'$b" $OS_NICKNAME "$c
 
