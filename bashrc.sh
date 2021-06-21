@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+# # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # #
 # @name: yet-another-bashrc
 # @os: centos/ubuntu
 # @version: 2021.06.21
-# @usage: append this file to ~/.bashrc
+# @usage: https://github.com/vbem/yet-another-bashrc
 
 # Loading order of bashrc mentioned in 'man bash':
 
@@ -59,22 +59,22 @@
 #     source ~/.bashrc
 #         SEE ABOVE
 
-# avoid duplicated source, and interactive shell
-if [ ! -v YET_ANOTHER_BASHRC ] && [[ $- == *i* ]]; then # 
+[[ $- == *i* ]] || return # must interactive shell
+[ -v YET_ANOTHER_BASHRC ] && return # # avoid duplicated source
 YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # https://github.com/pypa/setuptools/issues/1458#issuecomment-574076414
 # export PYTHONWARNINGS=ignore:::pkg_resources.py2_warn
+
+# PROMPT_COMMAND
+[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
 
 # Do not pipe output into a pager, see `man systemctl`
 export SYSTEMD_PAGER=
 
 # bash cmd history
 export HISTTIMEFORMAT="%F_%T "
-[ "$(which hh 2> /dev/null)" ] \
-&& PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"' \
-&& eval "$(hh --show-configuration)"
+[ "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
 
 # shell completions
 [ "$(which kubectl 2> /dev/null)" ] && source <(kubectl completion bash)
@@ -216,5 +216,4 @@ unset OS_NICKNAME
 unset a b c x1
 unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_SHLVL PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-fi # YET_ANOTHER_BASHRC
+# # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # #
