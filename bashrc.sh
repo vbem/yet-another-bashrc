@@ -61,27 +61,13 @@
 
 [[ $- == *i* ]] || return # must interactive shell
 [ -v YET_ANOTHER_BASHRC ] && return # # avoid duplicated source
-YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
+export YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
 
 # https://github.com/pypa/setuptools/issues/1458#issuecomment-574076414
 # export PYTHONWARNINGS=ignore:::pkg_resources.py2_warn
 
-# PROMPT_COMMAND
-[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-
 # Do not pipe output into a pager, see `man systemctl`
 export SYSTEMD_PAGER=
-
-# bash cmd history
-export HISTTIMEFORMAT="%F_%T "
-[ "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
-
-# shell completions
-[ "$(which kubectl 2> /dev/null)" ] && source <(kubectl completion bash)
-[ "$(which aliyun 2> /dev/null)" ] && complete -C $(which aliyun) aliyun
-[ "$(which helm 2> /dev/null)" ] && source <(helm completion bash)
-[ "$(which yq 2> /dev/null)" ] && source <(yq shell-completion bash)
-[ "$(which rclone 2> /dev/null)" ] && source <(rclone -q genautocomplete bash -)
 
 # colorful manpage
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -179,7 +165,7 @@ PS1_LOC=$a'95;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo "
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 PS1_RET=$a'1;97;41'$b'$(r=$?; [ $r -ne 0 ] && echo " \\$?=$r ")'$c
 if [ "$DISPLAY" -a "$WSL_DISTRO_NAME" ]; then # in WSL and MobaXterm
-    PS1_SHLVL=$a'1;97;43'$b'$([ 2 -lt $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c
+    PS1_SHLVL=$a'1;97;43'$b'$([ 2 -lt $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c # WSL-CentOS case only
 else
     PS1_SHLVL=$a'1;97;43'$b'$([ 1 -ne $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c
 fi
@@ -210,10 +196,23 @@ done
 
 # all
 PS1=$PS1_RET$PS1_SHLVL$PS1_LOGIN$PS1_PYVENV$PS1_GIT$PS1_OS$PS1_LOC$PS1_PMT
-
-# clear
 unset OS_NICKNAME
 unset a b c x1
 unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_SHLVL PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
+
+# terminal title
+#[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+
+# bash cmd history
+export HISTTIMEFORMAT="%F_%T "
+[ "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
+
+# shell completions
+[ "$(which kubectl 2> /dev/null)" ] && source <(kubectl completion bash)
+[ "$(which aliyun 2> /dev/null)" ] && complete -C $(which aliyun) aliyun
+[ "$(which helm 2> /dev/null)" ] && source <(helm completion bash)
+[ "$(which yq 2> /dev/null)" ] && source <(yq shell-completion bash)
+[ "$(which rclone 2> /dev/null)" ] && source <(rclone -q genautocomplete bash -)
 
 # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # #
