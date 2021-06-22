@@ -2,10 +2,7 @@
 A general bashrc attachment with personalized prompt and aliases.
 
 ## What is "yet-another-bashrc"?
-Every skillful Linuxer has a *personalized snippet of `.bashrc`* to customize interactive shell prompt and aliases, but how one keeps consistent of it among many machines especially on cloud hosts like AWS EC2 and others. A version controled, via-HTTP available snippet is generally needed, with following features:
-- Centralized versionable and distributed deployment
-- HTTP available and consistent user experience
-- A prompt and aliases template forkable by any user
+Every skillful Linuxer has a *personalized snippet of `.bashrc`* to customize interactive shell prompt and aliases, but how one keeps consistent of it among many machines especially on cloud hosts like AWS EC2 and others. A version controled, via-HTTP available snippet is generally needed, with custom features.
 
 ## Snapshot:
 ![snapshot](https://raw.githubusercontent.com/vbem/remote-bashrc/master/img/snapshot.png)
@@ -14,10 +11,10 @@ Every skillful Linuxer has a *personalized snippet of `.bashrc`* to customize in
 ### Load automaticly:
 ```sh
 # for current user:
-echo 'source <(curl -s https://raw.githubusercontent.com/vbem/yet-another-bashrc/master/bashrc.sh)' >> ~/.bashrc
+echo 'source <(curl -s -m 2 --retry 1 https://raw.githubusercontent.com/vbem/yet-another-bashrc/master/bashrc.sh)' >> ~/.bashrc
 
 # for all users:
-sudo echo 'source <(curl -s https://raw.githubusercontent.com/vbem/yet-another-bashrc/master/bashrc.sh)'  >> /etc/bashrc
+sudo echo 'source <(curl -s -m 2 --retry 1 https://raw.githubusercontent.com/vbem/yet-another-bashrc/master/bashrc.sh)' >> /etc/bashrc
 ```
 
 ### Load manually:
