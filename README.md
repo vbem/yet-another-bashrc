@@ -11,10 +11,10 @@ Every skillful Linuxer has a *personalized snippet of `.bashrc`* to customize in
 ### Load automaticly:
 ```sh
 # for current user:
-echo 'source <(curl -s -m 2 --retry 1 https://raw.githubusercontent.com/vbem/yet-another-bashrc/master/bashrc.sh)' >> ~/.bashrc
+echo '[ -v YET_ANOTHER_BASHRC ] || source <(curl -s -m 2 --retry 1 https://raw.githubusercontent.com/vbem/yet-another-bashrc/master/bashrc.sh)' >> ~/.bashrc
 
 # for all users:
-sudo echo 'source <(curl -s -m 2 --retry 1 https://raw.githubusercontent.com/vbem/yet-another-bashrc/master/bashrc.sh)' >> /etc/bashrc
+sudo echo '[ -v YET_ANOTHER_BASHRC ] || source <(curl -s -m 2 --retry 1 https://raw.githubusercontent.com/vbem/yet-another-bashrc/master/bashrc.sh)' >> /etc/bashrc
 ```
 
 ### Load manually:
