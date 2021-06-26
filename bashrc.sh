@@ -164,7 +164,7 @@ x1=$a'2;90;40'$b
 PS1_LOC=$a'95;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'3;32;40'$b"$(echo $(hostname --all-ip-addresses))"$x1'@'$a'4;34;40'$b'\H'$x1':'$a'1;33;40'$b'$PWD '$c
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 PS1_RET=$a'1;97;41'$b'$(r=$?; [ $r -ne 0 ] && echo " \\$?=$r ")'$c
-if [ -v DISPLAY -a -v WSL_DISTRO_NAME ]; then # in WSL and MobaXterm
+if [ -v DISPLAY -a -v WSLENV ]; then # in WSL and MobaXterm
     PS1_SHLVL=$a'1;97;43'$b'$([ 2 -lt $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c # WSL-CentOS case only
 else
     PS1_SHLVL=$a'1;97;43'$b'$([ 1 -ne $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c
