@@ -61,7 +61,7 @@
 
 [[ $- == *i* ]] || return # must interactive shell
 [ -v YET_ANOTHER_BASHRC ] && return # # avoid duplicated source
-export YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
+YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
 
 # https://github.com/pypa/setuptools/issues/1458#issuecomment-574076414
 # export PYTHONWARNINGS=ignore:::pkg_resources.py2_warn
