@@ -106,6 +106,7 @@ alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
 alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
 alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
 alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
+alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
 
 # cloud aliases
 if timeout 0.01 ping -c1 100.100.100.200 > /dev/null; then
