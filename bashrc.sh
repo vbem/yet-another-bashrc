@@ -215,5 +215,6 @@ export HISTTIMEFORMAT="%F_%T "
 [ "$(which helm 2> /dev/null)" ] && source <(helm completion bash)
 [ "$(which yq 2> /dev/null)" ] && source <(yq shell-completion bash)
 [ "$(which rclone 2> /dev/null)" ] && source <(rclone -q genautocomplete bash -)
+which terraform >& /dev/null && complete -C "$(which terraform)" terraform
 
 # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # #
