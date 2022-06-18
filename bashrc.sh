@@ -210,7 +210,7 @@ export HISTTIMEFORMAT="%F_%T "
 [ "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
 
 # shell completions
-[ "$(which kubectl 2> /dev/null)" ] && source <(kubectl completion bash)
+which kubectl >& /dev/null && source <(kubectl completion bash 2> /dev/null)
 [ "$(which aliyun 2> /dev/null)" ] && complete -C $(which aliyun) aliyun
 [ "$(which helm 2> /dev/null)" ] && source <(helm completion bash)
 [ "$(which yq 2> /dev/null)" ] && source <(yq shell-completion bash)
