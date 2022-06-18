@@ -212,9 +212,9 @@ export HISTTIMEFORMAT="%F_%T "
 # shell completions
 which kubectl >& /dev/null && source <(kubectl completion bash 2> /dev/null)
 which helm >& /dev/null && source <(helm completion bash 2> /dev/null)
-[ "$(which aliyun 2> /dev/null)" ] && complete -C $(which aliyun) aliyun
-[ "$(which yq 2> /dev/null)" ] && source <(yq shell-completion bash)
-[ "$(which rclone 2> /dev/null)" ] && source <(rclone -q genautocomplete bash -)
+which yq >& /dev/null && source <(yq shell-completion bash 2> /dev/null)
+which rclone >& /dev/null && source <(rclone -q genautocomplete bash - 2> /dev/null)
+which aliyun >& /dev/null && complete -C "$(which aliyun)" aliyun
 which terraform >& /dev/null && complete -C "$(which terraform)" terraform
 
 # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # #
