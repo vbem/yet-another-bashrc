@@ -210,11 +210,11 @@ export HISTTIMEFORMAT="%F_%T "
 [ "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
 
 # shell completions
-which kubectl >& /dev/null && source <(kubectl completion bash 2> /dev/null)
-which helm >& /dev/null && source <(helm completion bash 2> /dev/null)
-which yq >& /dev/null && source <(yq shell-completion bash 2> /dev/null)
-which rclone >& /dev/null && source <(rclone -q genautocomplete bash - 2> /dev/null)
-which aliyun >& /dev/null && complete -C "$(which aliyun)" aliyun
-which terraform >& /dev/null && complete -C "$(which terraform)" terraform
+#which kubectl >& /dev/null && source <(kubectl completion bash 2> /dev/null)
+#which helm >& /dev/null && source <(helm completion bash 2> /dev/null)
+#which yq >& /dev/null && source <(yq shell-completion bash 2> /dev/null)
+#which rclone >& /dev/null && source <(rclone -q genautocomplete bash - 2> /dev/null)
+#which aliyun >& /dev/null && complete -C "$(which aliyun)" aliyun
+#which terraform >& /dev/null && complete -C "$(which terraform)" terraform
 
 # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # #
