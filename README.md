@@ -1,5 +1,7 @@
 # yet-another-bashrc
-A general bashrc attachment with personalized prompt and aliases.
+[![Linter](https://github.com/vbem/yet-another-bashrc/actions/workflows/linter.yml/badge.svg)](https://github.com/vbem/yet-another-bashrc/actions/workflows/linter.yml)
+
+A general `bashrc` fragment with personalized prompt and aliases.
 
 ## Snapshot
 ![snapshot](https://raw.githubusercontent.com/vbem/remote-bashrc/master/img/snapshot.png)

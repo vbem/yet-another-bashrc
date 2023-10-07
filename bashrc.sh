@@ -164,7 +164,7 @@ PS1_PYVENV=$a'3;97;42'$b'$([ "$VIRTUAL_ENV" ] && echo " venv@$VIRTUAL_ENV ")'$c
 GIT_PMT_LIST=(
     '/usr/share/git-core/contrib/completion/git-prompt.sh'
 )
-for nIndex in ${!GIT_PMT_LIST[@]}; do
+for nIndex in "${!GIT_PMT_LIST[@]}"; do
     if [ -f ${GIT_PMT_LIST[$nIndex]} ]; then
         GIT_PS1_SHOWDIRTYSTATE=1;
         GIT_PS1_SHOWSTASHSTATE=1;
