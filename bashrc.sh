@@ -168,13 +168,14 @@ GIT_PMT_LIST=(
 )
 for f in "${GIT_PMT_LIST[@]}"; do
     [[ ! -r "$f" ]] && continue
+    # shellcheck disable=SC2034
     declare -rg GIT_PS1_SHOWDIRTYSTATE=1;
     declare -rg GIT_PS1_SHOWSTASHSTATE=1;
     declare -rg GIT_PS1_SHOWUNTRACKEDFILES=1;
     declare -rg GIT_PS1_SHOWUPSTREAM="verbose legacy git";
     declare -rg GIT_PS1_DESCRIBE_STYLE=branch;
     declare -rg GIT_PS1_SHOWCOLORHINTS=1;
-    source "$f";
+    source "$f"; # shellcheck source=/dev/null
     PS1_GIT=$a'1;3;97;104'$b'$(__git_ps1 " %s ")'$c;
     break;
 done
