@@ -1,7 +1,7 @@
 # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # #
 # @name: yet-another-bashrc
 # @os: centos/ubuntu
-# @version: 2021.06.21
+# @version: 2023.10.07
 # @usage: https://github.com/vbem/yet-another-bashrc
 
 # Loading order of bashrc mentioned in 'man bash':
@@ -61,13 +61,10 @@
 
 [[ $- == *i* ]] || return # must interactive shell
 [ -v YET_ANOTHER_BASHRC ] && return # # avoid duplicated source
-YET_ANOTHER_BASHRC=$(realpath ${BASH_SOURCE[0]}) # sourced sential
-
-# https://github.com/pypa/setuptools/issues/1458#issuecomment-574076414
-# export PYTHONWARNINGS=ignore:::pkg_resources.py2_warn
+YET_ANOTHER_BASHRC="$(realpath ${BASH_SOURCE[0]})" && declare -rg YET_ANOTHER_BASHRC # sourced sential
 
 # Do not pipe output into a pager, see `man systemctl`
-export SYSTEMD_PAGER=
+export SYSTEMD_PAGER=''
 
 # colorful manpage
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -83,18 +80,12 @@ alias .ls='ls -alFh --time-style=long-iso --color=auto'
 alias .tree='tree -fiapughDFCN --timefmt %F_%T --du --dirsfirst'
 alias .grep='grep -E -n --color=auto'
 alias .diff='diff -y'
-alias .df='df -h'
-alias .du='du -h'
 alias .date='date +"%F %T %z"'
-alias .tar='tar -v'
-alias .free='free -h'
+alias .ss='ss -4ltn'
 alias .ps='ps ux'
 alias .pstree='pstree -up'
-alias .fuser='fuser -v'
-alias .lsof='sudo lsof'
 alias .pidof='pidof -x'
 alias .newgrp='newgrp -'
-alias .userdel='sudo userdel -rf'
 alias .grep.code='grep -E -v "^[[:space:]]*$|^[[:space:]]*#"'
 alias .nginx.reload='sudo nginx -t && sudo systemctl reload nginx'
 alias .curl.header='curl -sv -o /dev/null'
@@ -141,25 +132,25 @@ fi
 # for PS1
 
 # vars
-if [ "$WSL_DISTRO_NAME" ]; then
+if [[ -n "$WSL_DISTRO_NAME" ]]; then
     OS_NICKNAME=WSL-$WSL_DISTRO_NAME
-elif [ -f /etc/os-release ]; then
-    OS_NICKNAME=$(source /etc/os-release && echo $ID-$VERSION_ID)
-elif [ "$(which lsb_release 2> /dev/null)" ]; then
-    OS_NICKNAME=$(lsb_release -is)-$(lsb_release -rs)
-elif [ -f /etc/system-release-cpe ]; then
-    OS_NICKNAME=$(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')
-elif [ -f /etc/system-release ]; then
-    OS_NICKNAME=$(cat /etc/system-release)
+elif [[ -f /etc/os-release ]]; then
+    OS_NICKNAME="$(source /etc/os-release && echo $ID-$VERSION_ID)"
+elif [[ "$(which lsb_release 2> /dev/null)" ]]; then
+    OS_NICKNAME="$(lsb_release -is)-$(lsb_release -rs)"
+elif [[ -f /etc/system-release-cpe ]]; then
+    OS_NICKNAME="$(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')"
+elif [[ -f /etc/system-release ]]; then
+    OS_NICKNAME="$(cat /etc/system-release)"
 else
-    OS_NICKNAME="unknown-os"
+    OS_NICKNAME='unknown-os'
 fi
 
 #color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
 a='\[\e[0m\]\[\e['
 b='m\]'
-c=$a'0'$b
-x1=$a'2;90;40'$b
+c="$a"'0'"$b"
+x1="$a"'2;90;40'"$b"
 
 # parts
 PS1_LOC=$a'95;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'3;32;40'$b"$(echo $(hostname --all-ip-addresses))"$x1'@'$a'4;34;40'$b'\H'$x1':'$a'1;33;40'$b'$PWD '$c
@@ -207,7 +198,7 @@ PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
 
 # bash cmd history
 export HISTTIMEFORMAT="%F_%T "
-[ "$(which hh 2> /dev/null)" ] && eval "$(hh --show-configuration)"
+command -v hstr &> /dev/null && eval "$(hstr --show-configuration)"
 
 # shell completions
 #which kubectl >& /dev/null && source <(kubectl completion bash 2> /dev/null)
@@ -217,4 +208,5 @@ export HISTTIMEFORMAT="%F_%T "
 #which aliyun >& /dev/null && complete -C "$(which aliyun)" aliyun
 #which terraform >& /dev/null && complete -C "$(which terraform)" terraform
 
+return 0
 # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # #
