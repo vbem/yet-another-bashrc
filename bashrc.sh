@@ -161,21 +161,22 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 PS1_PYVENV=$a'3;97;42'$b'$([ "$VIRTUAL_ENV" ] && echo " venv@$VIRTUAL_ENV ")'$c
 
 # git
+# https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-Bash
+# https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
 GIT_PMT_LIST=(
     '/usr/share/git-core/contrib/completion/git-prompt.sh'
 )
-for nIndex in "${!GIT_PMT_LIST[@]}"; do
-    if [ -f ${GIT_PMT_LIST[$nIndex]} ]; then
-        GIT_PS1_SHOWDIRTYSTATE=1;
-        GIT_PS1_SHOWSTASHSTATE=1;
-        GIT_PS1_SHOWUNTRACKEDFILES=1;
-        GIT_PS1_SHOWUPSTREAM="verbose legacy git";
-        GIT_PS1_DESCRIBE_STYLE=branch;
-        GIT_PS1_SHOWCOLORHINTS=1;
-        source "${GIT_PMT_LIST[$nIndex]}";
-        PS1_GIT=$a'1;3;97;104'$b'$(__git_ps1 " %s ")'$c;
-        break;
-    fi
+for f in "${GIT_PMT_LIST[@]}"; do
+    [[ ! -r "$f" ]] && continue
+    declare -rg GIT_PS1_SHOWDIRTYSTATE=1;
+    declare -rg GIT_PS1_SHOWSTASHSTATE=1;
+    declare -rg GIT_PS1_SHOWUNTRACKEDFILES=1;
+    declare -rg GIT_PS1_SHOWUPSTREAM="verbose legacy git";
+    declare -rg GIT_PS1_DESCRIBE_STYLE=branch;
+    declare -rg GIT_PS1_SHOWCOLORHINTS=1;
+    source "$f";
+    PS1_GIT=$a'1;3;97;104'$b'$(__git_ps1 " %s ")'$c;
+    break;
 done
 
 # all
@@ -200,4 +201,4 @@ command -v hstr &> /dev/null && eval "$(hstr --show-configuration)"
 #which aliyun >& /dev/null && complete -C "$(which aliyun)" aliyun
 #which terraform >& /dev/null && complete -C "$(which terraform)" terraform
 
-return 0
+:
