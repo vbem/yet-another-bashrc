@@ -1,8 +1,5 @@
-# # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # #
-# @name: yet-another-bashrc
-# @os: centos/ubuntu
-# @version: 2023.10.07
-# @usage: https://github.com/vbem/yet-another-bashrc
+#!/usr/bin/env bash
+# https://github.com/vbem/yet-another-bashrc
 
 # Loading order of bashrc mentioned in 'man bash':
 
@@ -153,19 +150,14 @@ c="$a"'0'"$b"
 x1="$a"'2;90;40'"$b"
 
 # parts
-PS1_LOC=$a'95;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'3;32;40'$b"$(echo $(hostname --all-ip-addresses))"$x1'@'$a'4;34;40'$b'\H'$x1':'$a'1;33;40'$b'$PWD '$c
+PS1_LOC=$a'95;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'3;32;40'$b"$(echo "$(hostname --all-ip-addresses)")"$x1'@'$a'4;34;40'$b'\H'$x1':'$a'1;33;40'$b'$PWD '$c
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 PS1_RET=$a'1;97;41'$b'$(r=$?; [ $r -ne 0 ] && echo " \\$?=$r ")'$c
-if [ -v DISPLAY -a -v WSLENV ]; then # in WSL and MobaXterm
-    PS1_SHLVL=$a'1;97;43'$b'$([ 2 -lt $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c # WSL-CentOS case only
-else
-    PS1_SHLVL=$a'1;97;43'$b'$([ 1 -ne $SHLVL ] && echo " \\$SHLVL=$SHLVL ")'$c
-fi
 PS1_LOGIN=$a'1;97;45'$b'$(shopt -q login_shell; [ 0 -ne $? ] && echo " non-login ")'$c
 PS1_OS=$a'3;37;100'$b" $OS_NICKNAME "$c
 
 # python venv
-VIRTUAL_ENV_DISABLE_PROMPT=1
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 PS1_PYVENV=$a'3;97;42'$b'$([ "$VIRTUAL_ENV" ] && echo " venv@$VIRTUAL_ENV ")'$c
 
 # git
@@ -180,7 +172,7 @@ for nIndex in ${!GIT_PMT_LIST[@]}; do
         GIT_PS1_SHOWUPSTREAM="verbose legacy git";
         GIT_PS1_DESCRIBE_STYLE=branch;
         GIT_PS1_SHOWCOLORHINTS=1;
-        source ${GIT_PMT_LIST[$nIndex]};
+        source "${GIT_PMT_LIST[$nIndex]}";
         PS1_GIT=$a'1;3;97;104'$b'$(__git_ps1 " %s ")'$c;
         break;
     fi
@@ -209,4 +201,3 @@ command -v hstr &> /dev/null && eval "$(hstr --show-configuration)"
 #which terraform >& /dev/null && complete -C "$(which terraform)" terraform
 
 return 0
-# # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # # YET_ANOTHER_BASHRC # # #
