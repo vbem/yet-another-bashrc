@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034,SC1090
 # https://github.com/vbem/yet-another-bashrc
 
 # Loading order of bashrc mentioned in 'man bash':
@@ -168,14 +169,13 @@ GIT_PMT_LIST=(
 )
 for f in "${GIT_PMT_LIST[@]}"; do
     [[ ! -r "$f" ]] && continue
-    # shellcheck disable=SC2034
     declare -rg GIT_PS1_SHOWDIRTYSTATE=1;
     declare -rg GIT_PS1_SHOWSTASHSTATE=1;
     declare -rg GIT_PS1_SHOWUNTRACKEDFILES=1;
     declare -rg GIT_PS1_SHOWUPSTREAM="verbose legacy git";
     declare -rg GIT_PS1_DESCRIBE_STYLE=branch;
     declare -rg GIT_PS1_SHOWCOLORHINTS=1;
-    source "$f"; # shellcheck source=/dev/null
+    source "$f";
     PS1_GIT=$a'1;3;97;104'$b'$(__git_ps1 " %s ")'$c;
     break;
 done
@@ -201,5 +201,4 @@ command -v hstr &> /dev/null && eval "$(hstr --show-configuration)"
 #which rclone >& /dev/null && source <(rclone -q genautocomplete bash - 2> /dev/null)
 #which aliyun >& /dev/null && complete -C "$(which aliyun)" aliyun
 #which terraform >& /dev/null && complete -C "$(which terraform)" terraform
-
 :
