@@ -192,7 +192,7 @@ PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
 
 # bash cmd history
 export HISTTIMEFORMAT="%F_%T "
-command -v hstr &> /dev/null && eval "$(hstr --show-configuration)"
+command -v hstr &> /dev/null && source <(hstr --show-configuration)
 
 # shell completions
 #which kubectl >& /dev/null && source <(kubectl completion bash 2> /dev/null)
