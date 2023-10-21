@@ -64,6 +64,9 @@ YET_ANOTHER_BASHRC="$(realpath ${BASH_SOURCE[0]})" && declare -rg YET_ANOTHER_BA
 # Do not pipe output into a pager, see `man systemctl`
 export SYSTEMD_PAGER=''
 
+# https://git-scm.com/docs/git#Documentation/git.txt-codeGITPAGERcode
+export GIT_PAGER=''
+
 # colorful manpage
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
