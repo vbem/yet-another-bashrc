@@ -23,8 +23,11 @@ jobs:
       # https://github.com/marketplace/actions/checkout
       - uses: actions/checkout@v4
 
-      - run: |
+      - shell: bash -lie {0}
+        run: |
           shopt -s expand_aliases
           source bashrc.sh || :
           echo "$YET_ANOTHER_BASHRC"
+          .ls
+          .tree
 ...
