@@ -25,6 +25,6 @@ jobs:
 
       - run: |
           shopt -s expand_aliases
-          source bashrc.sh
+          source bashrc.sh || :
           echo "$YET_ANOTHER_BASHRC"
 ...
