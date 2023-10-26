@@ -11,7 +11,7 @@ concurrency:
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
     paths: ['*.sh', '*.bash', '.github/workflows/test.yml']
   workflow_dispatch:
 
