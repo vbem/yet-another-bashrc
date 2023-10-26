@@ -26,6 +26,5 @@ jobs:
       - run: |
           shopt -s expand_aliases
           source bashrc.sh
-          .curl.ip
-          .tree
+          echo "$YET_ANOTHER_BASHRC"
 ...
