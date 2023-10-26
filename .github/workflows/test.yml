@@ -25,7 +25,7 @@ jobs:
 
       - shell: bash
         run: |
-          source bashrc.sh
+          source bashrc.sh || :
           .curl.ip
           .tree
 ...
