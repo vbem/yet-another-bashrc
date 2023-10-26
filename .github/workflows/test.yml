@@ -1,0 +1,31 @@
+---
+name: Testing
+
+env:
+  TZ: Asia/Shanghai
+
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow
+concurrency:
+  group: ${{ github.workflow }}@${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [main]
+    paths: ['*.sh', '*.bash, '.github/workflows/test.yml']
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: [ubuntu-latest]
+
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - uses: actions/checkout@v4
+
+      - shell: bash
+        run: |
+          source bashrc.sh
+          .curl.ip
+          .tree
+...
