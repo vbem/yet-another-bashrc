@@ -1,5 +1,5 @@
 ---
-name: Testing
+name: Test
 
 env:
   TZ: Asia/Shanghai
@@ -12,7 +12,7 @@ concurrency:
 on:
   push:
     branches: [main]
-    paths: ['*.sh', '*.bash, '.github/workflows/test.yml']
+    paths: ['*.sh', '*.bash', '.github/workflows/test.yml']
   workflow_dispatch:
 
 jobs:

@@ -1,5 +1,6 @@
 # yet-another-bashrc
 [![Linter](https://github.com/vbem/yet-another-bashrc/actions/workflows/linter.yml/badge.svg)](https://github.com/vbem/yet-another-bashrc/actions/workflows/linter.yml)
+[![Test](https://github.com/vbem/yet-another-bashrc/actions/workflows/test.yml/badge.svg)](https://github.com/vbem/yet-another-bashrc/actions/workflows/test.yml)
 
 A general `bashrc` fragment with personalized prompt and aliases.
 
