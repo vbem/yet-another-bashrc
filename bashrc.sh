@@ -101,7 +101,7 @@ alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automag
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
 
 # cloud aliases
-if timeout 0.1 ping -c1 100.100.100.200 > /dev/null; then
+if timeout 0.1 curl -s -m 1 http://100.100.100.200 > /dev/null; then
     alias .aliyun.use.role='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
     alias .aliyun.set.role='aliyun configure set --profile default --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
     alias .ecs.account='curl -s 100.100.100.200/latest/meta-data/owner-account-id'
@@ -115,7 +115,7 @@ if timeout 0.1 ping -c1 100.100.100.200 > /dev/null; then
     alias .ecs.role='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/'
     alias .ecs.sts='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/$(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/)'
     alias .ecs.tags='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id) ecs DescribeInstances --InstanceIds ["\"$(curl -s 100.100.100.200/latest/meta-data/instance-id)\""] | jq -Mcr "[.Instances.Instance[].Tags.Tag[]|{(.TagKey):.TagValue}]|add"'
-elif timeout 0.1 ping -c1 169.254.169.25 > /dev/null; then
+elif timeout 0.1 curl -s -m 1 http://169.254.169.25 > /dev/null; then
     alias .ec2.document='curl -s 169.254.169.254/latest/dynamic/instance-identity/document'
     alias .ec2.region="curl -s 169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//'"
     alias .ec2.az='curl -s 169.254.169.254/latest/meta-data/placement/availability-zone'
