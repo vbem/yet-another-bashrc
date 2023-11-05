@@ -4,7 +4,7 @@
 
 # Loading order of bashrc mentioned in 'man bash':
 
-# CentOS:
+# RHEL:
 # if login shell
 #     source /etc/profile
 #         export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL
@@ -90,7 +90,7 @@ alias .newgrp='newgrp -'
 alias .grep.code='grep -E -v "^[[:space:]]*$|^[[:space:]]*#"'
 alias .nginx.reload='sudo nginx -t && sudo systemctl reload nginx'
 alias .curl.header='curl -sv -o /dev/null'
-alias .curl.ip='curl -s -4 icanhazip.com'
+alias .curl.ip='curl -s -4 myip.ipip.net'
 alias .git.log='git log --graph --all --decorate --oneline'
 alias .venv.clear='python3 -m venv --clear'
 function .venv.activate { . $1/bin/activate; }
