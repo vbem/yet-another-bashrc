@@ -58,8 +58,8 @@
 #         SEE ABOVE
 
 [[ $- == *i* ]] || return # must interactive shell
-[ -v YET_ANOTHER_BASHRC ] && return # # avoid duplicated source
-YET_ANOTHER_BASHRC="$(realpath ${BASH_SOURCE[0]})" && declare -rg YET_ANOTHER_BASHRC # sourced sential
+[[ -v YET_ANOTHER_BASHRC ]] && return # # avoid duplicated source
+YET_ANOTHER_BASHRC="$(realpath ${BASH_SOURCE[0]})" && declare -rg YET_ANOTHER_BASHRC # sourced sentinel
 
 # Do not pipe output into a pager, see `man systemctl`
 export SYSTEMD_PAGER=''
