@@ -134,7 +134,7 @@ fi
 
 # vars
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
-    OS_NICKNAME=WSL-$WSL_DISTRO_NAME
+    OS_NICKNAME=WSL-"$WSL_DISTRO_NAME"
 elif [[ -f /etc/os-release ]]; then
     OS_NICKNAME="$(source /etc/os-release && echo $ID-$VERSION_ID)"
 elif [[ "$(which lsb_release 2> /dev/null)" ]]; then
