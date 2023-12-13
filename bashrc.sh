@@ -196,13 +196,21 @@ PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
 
 # bash cmd history
 export HISTTIMEFORMAT="%F_%T "
-command -v hstr &> /dev/null && source <(hstr --show-configuration)
+command -v hstr &> /dev/null && source <(hstr --show-configuration 2> /dev/null)
+
+# kubectl completion https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
+command -v kubectl &> /dev/null && source <(kubectl completion bash 2> /dev/null)
+
+# rclone completion https://rclone.org/commands/rclone_completion/
+command -v rclone &> /dev/null && source <(rclone completion bash 2> /dev/null)
+
+# yq completion https://mikefarah.gitbook.io/yq/commands/shell-completion#bash-default
+command -v yq &> /dev/null && source <(yq shell-completion bash 2> /dev/null)
+
+# aliyun completion https://help.aliyun.com/document_detail/122038.html
+command -v aliyun &> /dev/null && complete -C "$(command -v aliyun)" aliyun
 
 # shell completions
-#which kubectl >& /dev/null && source <(kubectl completion bash 2> /dev/null)
 #which helm >& /dev/null && source <(helm completion bash 2> /dev/null)
-#which yq >& /dev/null && source <(yq shell-completion bash 2> /dev/null)
-#which rclone >& /dev/null && source <(rclone -q genautocomplete bash - 2> /dev/null)
-#which aliyun >& /dev/null && complete -C "$(which aliyun)" aliyun
 #which terraform >& /dev/null && complete -C "$(which terraform)" terraform
 :
