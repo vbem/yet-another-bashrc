@@ -98,6 +98,12 @@ alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
 alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
 alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
 alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
+alias .code.add='code --reuse-window --add'
+alias .code.diff='code --reuse-window --diff'
+alias .code.list='code --reuse-window --list-extensions --show-versions'
+alias .code.standalone.user='read -r -p "Install VSCode CLI Standalone user-wide? [y/n]" code_standalone && [[ "$code_standalone" == "y" ]] && mkdir ~/bin && curl -Lk "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64" | tar -xzC ~/bin && ls -al ~/bin/code'
+alias .code.standalone.system='read -r -p "Install VSCode CLI Standalone system-wide? [y/n]" code_standalone && [[ "$code_standalone" == "y" ]] && curl -Lk "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64" | sudo tar -xzC /usr/local/bin && ls -al /usr/local/bin/code'
+alias .code.tunnel='code --verbose tunnel'
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
 
 # cloud aliases
