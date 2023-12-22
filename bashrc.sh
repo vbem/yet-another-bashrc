@@ -108,7 +108,7 @@ alias .code.list='.code --list-extensions --show-versions'
 alias .code.standalone='mkdir -p ~/bin && curl -Lk "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64" | tar -xzC ~/bin && ls -al ~/bin/code && .code --version'
 alias .code.tunnel='.code tunnel'
 alias .code.tunnel.user='.code.tunnel user'
-alias .code.tunnel.service.install='sudo mkdir /etc/systemd/user.conf.d/ && sudo echo -e "[Manager]\nDefaultEnvironment=SHELL=/bin/bash" > /etc/systemd/user.conf.d/DefaultEnvironment.conf && systemctl --user daemon-reload && .code.tunnel service install --accept-server-license-terms --name "${USER}_${HOSTNAME}" && ls -al ~/.config/systemd/user/ && sudo loginctl enable-linger "$USER" && systemctl --user status code-tunnel && .code.tunnel status | jq' # https://wiki.archlinux.org/title/systemd/User
+alias .code.tunnel.service.install='sudo mkdir -p /etc/systemd/user.conf.d/ && sudo echo -e "[Manager]\nDefaultEnvironment=SHELL=/bin/bash" > /etc/systemd/user.conf.d/DefaultEnvironment.conf && systemctl --user daemon-reload && .code.tunnel service install --accept-server-license-terms --name "${USER}_${HOSTNAME}" && ls -al ~/.config/systemd/user/ && sudo loginctl enable-linger "$USER" && systemctl --user status code-tunnel && .code.tunnel status | jq' # https://wiki.archlinux.org/title/systemd/User
 alias .code.tunnel.service.uninstall='.code.tunnel service uninstall && .code.tunnel unregister && systemctl --user daemon-reload'
 
 # cloud aliases
