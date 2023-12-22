@@ -98,6 +98,9 @@ alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
 alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
 alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
 alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
+alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
+
+# VS code
 alias .code='code --verbose'
 alias .code.add='.code --reuse-window --add'
 alias .code.diff='.code --reuse-window --diff'
@@ -105,9 +108,8 @@ alias .code.list='.code --list-extensions --show-versions'
 alias .code.standalone='mkdir -p ~/bin && curl -Lk "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64" | tar -xzC ~/bin && ls -al ~/bin/code && .code --version'
 alias .code.tunnel='.code tunnel'
 alias .code.tunnel.user='.code.tunnel user'
-alias .code.tunnel.service.install='mkdir ~/.config/environment.d/ && echo 'SHELL=/bin/bash' > ~/.config/environment.d/SHELL.conf && systemctl --user daemon-reload && .code.tunnel service install --accept-server-license-terms --name "${USER}_${HOSTNAME}" && ls -al ~/.config/systemd/user/ && sudo loginctl enable-linger "$USER" && systemctl --user status code-tunnel && .code.tunnel status | jq'
+alias .code.tunnel.service.install='sudo mkdir /etc/systemd/user.conf.d/ && sudo echo -e "[Manager]\nDefaultEnvironment=SHELL=/bin/bash" > /etc/systemd/user.conf.d/DefaultEnvironment.conf && systemctl --user daemon-reload && .code.tunnel service install --accept-server-license-terms --name "${USER}_${HOSTNAME}" && ls -al ~/.config/systemd/user/ && sudo loginctl enable-linger "$USER" && systemctl --user status code-tunnel && .code.tunnel status | jq' # https://wiki.archlinux.org/title/systemd/User
 alias .code.tunnel.service.uninstall='.code.tunnel service uninstall && .code.tunnel unregister && systemctl --user daemon-reload'
-alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
 
 # cloud aliases
 if timeout 0.1 curl -s -m 1 http://100.100.100.200 > /dev/null; then
