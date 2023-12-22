@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2034,SC1090
+# shellcheck disable=SC2034,SC1090,SC2154
 # https://github.com/vbem/yet-another-bashrc
 
 # Loading order of bashrc mentioned in 'man bash':
@@ -102,7 +102,7 @@ alias .code='code --verbose'
 alias .code.add='.code --reuse-window --add'
 alias .code.diff='.code --reuse-window --diff'
 alias .code.list='.code --list-extensions --show-versions'
-alias .code.standalone='code_standalone="" && read -r -p "Install VSCode CLI Standalone user-wide? [y/n]" code_standalone && [[ "$code_standalone" == "y" ]] && mkdir -p ~/bin && curl -Lk "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64" | tar -xzC ~/bin && ls -al ~/bin/code && .code --version'
+alias .code.standalone='read -r -p "Install VSCode CLI Standalone user-wide? [y/n]" code_standalone && [[ "$code_standalone" == "y" ]] && mkdir -p ~/bin && curl -Lk "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64" | tar -xzC ~/bin && ls -al ~/bin/code && .code --version'
 alias .code.tunnel='.code tunnel'
 alias .code.tunnel.user='.code.tunnel user'
 alias .code.tunnel.status='.code.tunnel status'
