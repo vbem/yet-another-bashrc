@@ -145,7 +145,7 @@ fi
 
 # vars
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
-    OS_NICKNAME=WSL-"$WSL_DISTRO_NAME"
+    OS_NICKNAME="💻 $WSL_DISTRO_NAME"
 elif [[ -f /etc/os-release ]]; then
     OS_NICKNAME="$(source /etc/os-release && echo $ID-$VERSION_ID)"
 elif [[ "$(which lsb_release 2> /dev/null)" ]]; then
@@ -155,7 +155,7 @@ elif [[ -f /etc/system-release-cpe ]]; then
 elif [[ -f /etc/system-release ]]; then
     OS_NICKNAME="$(cat /etc/system-release)"
 else
-    OS_NICKNAME='unknown-os'
+    OS_NICKNAME='❔'
 fi
 
 #color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
@@ -168,8 +168,8 @@ x1="$a"'2;90;40'"$b"
 PS1_LOC=$a'92;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;96;40'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;95;40'$b'\H'$x1':'$a'93;40'$b'$PWD '$c
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 PS1_RET=$a'1;97;41'$b'$(r=$?; [ $r -ne 0 ] && echo " \\$?=$r ")'$c
-PS1_LOGIN=$a'1;97;45'$b'$(shopt -q login_shell; [ 0 -ne $? ] && echo " non-login ")'$c
-PS1_OS=$a'3;37;100'$b" $OS_NICKNAME "$c
+PS1_LOGIN=$a'3;97;100'$b'$(shopt -q login_shell || echo " non-login ")'$c
+PS1_OS=$a'1;30;47'$b" $OS_NICKNAME "$c
 
 # python venv
 export VIRTUAL_ENV_DISABLE_PROMPT=1
