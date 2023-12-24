@@ -108,8 +108,13 @@ alias .code.list='.code --list-extensions --show-versions'
 alias .code.standalone='mkdir -p ~/bin && curl -Lk "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64" | tar -xzC ~/bin && ls -al ~/bin/code && .code --version'
 alias .code.tunnel='.code tunnel'
 alias .code.tunnel.user='.code.tunnel user'
-alias .code.tunnel.service.install='sudo mkdir -p /etc/systemd/user.conf.d/ && sudo echo -e "[Manager]\nDefaultEnvironment=SHELL=/bin/bash" > /etc/systemd/user.conf.d/DefaultEnvironment.conf && systemctl --user daemon-reload && .code.tunnel service install --accept-server-license-terms --name "${USER}_${HOSTNAME}" && ls -al ~/.config/systemd/user/ && sudo loginctl enable-linger "$USER" && systemctl --user status code-tunnel && .code.tunnel status | jq' # https://wiki.archlinux.org/title/systemd/User
-alias .code.tunnel.service.uninstall='.code.tunnel service uninstall && .code.tunnel unregister && systemctl --user daemon-reload'
+alias .code.tunnel.status='.code.tunnel status | jq'
+alias .code.tunnel.unregister='.code.tunnel unregister'
+alias .code.tunnel.service='.code.tunnel service'
+alias .code.tunnel.service.ls='ls -al ~/.config/systemd/user/'
+alias .code.tunnel.service.status='systemctl --user status code-tunnel.service'
+alias .code.tunnel.service.uninstall='.code.tunnel.service uninstall && .code.tunnel.unregister && systemctl --user daemon-reload'
+alias .code.tunnel.service.install='systemctl --user daemon-reload && .code.tunnel.service install --accept-server-license-terms --name "${HOSTNAME}" && .code.tunnel.service.ls && sudo loginctl enable-linger "$USER"' # https://wiki.archlinux.org/title/systemd/User
 
 # cloud aliases
 if timeout 0.1 curl -s -m 1 http://100.100.100.200 > /dev/null; then
@@ -195,10 +200,10 @@ for f in "${GIT_PMT_LIST[@]}"; do
 done
 
 # all
-PS1="$PS1_RET$PS1_SHLVL$PS1_LOGIN$PS1_PYVENV$PS1_GIT$PS1_OS$PS1_LOC$PS1_PMT"
+PS1="$PS1_RET$PS1_PYVENV$PS1_GIT$PS1_OS$PS1_LOGIN$PS1_LOC$PS1_PMT"
 unset OS_NICKNAME
 unset a b c x1
-unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_SHLVL PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
+unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
 
 # terminal title
 #[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
@@ -212,7 +217,7 @@ command -v hstr &> /dev/null && source <(hstr --show-configuration 2> /dev/null)
 command -v kubectl &> /dev/null && source <(kubectl completion bash 2> /dev/null)
 
 # rclone completion https://rclone.org/commands/rclone_completion/
-command -v rclone &> /dev/null && source <(rclone completion bash 2> /dev/null)
+command -v rclone &> /dev/null && source <(RCLONE_CONFIG=/dev/null rclone completion bash 2> /dev/null)
 
 # yq completion https://mikefarah.gitbook.io/yq/commands/shell-completion#bash-default
 command -v yq &> /dev/null && source <(yq shell-completion bash 2> /dev/null)
