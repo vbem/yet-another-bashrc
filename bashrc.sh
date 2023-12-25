@@ -178,7 +178,7 @@ PS1_OS=$a'1;30;47'$b" $OS_NICKNAME "$c
 
 # python venv
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-PS1_PYVENV=$a'3;97;42'$b'$([ "$VIRTUAL_ENV" ] && echo " venv@$VIRTUAL_ENV ")'$c
+PS1_PYVENV=$a'3;97;42'$b'$([[ -n "$VIRTUAL_ENV" ]] && echo " venv@$VIRTUAL_ENV ")'$c
 
 # git
 # https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-Bash
