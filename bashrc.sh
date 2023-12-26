@@ -152,7 +152,7 @@ fi
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
     OS_NICKNAME="💻 $WSL_DISTRO_NAME"
 elif [[ -f /etc/os-release ]]; then
-    OS_NICKNAME="$(source /etc/os-release && echo $ID-$VERSION_ID)"
+    OS_NICKNAME="☁️ $(source /etc/os-release && echo $ID-$VERSION_ID)"
 elif [[ "$(which lsb_release 2> /dev/null)" ]]; then
     OS_NICKNAME="$(lsb_release -is)-$(lsb_release -rs)"
 elif [[ -f /etc/system-release-cpe ]]; then
@@ -160,7 +160,7 @@ elif [[ -f /etc/system-release-cpe ]]; then
 elif [[ -f /etc/system-release ]]; then
     OS_NICKNAME="$(cat /etc/system-release)"
 else
-    OS_NICKNAME='❔'
+    OS_NICKNAME='unknown'
 fi
 
 #color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
@@ -172,13 +172,13 @@ x1="$a"'2;90;40'"$b"
 # parts
 PS1_LOC=$a'92;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;96;40'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;95;40'$b'\H'$x1':'$a'93;40'$b'$PWD '$c
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
-PS1_RET=$a'1;97;41'$b'$(r=$?; [ $r -ne 0 ] && echo " \\$?=$r ")'$c
-PS1_LOGIN=$a'3;97;100'$b'$(shopt -q login_shell || echo " non-login ")'$c
+PS1_RET=$a'1;97;41'$b'$(r=$? && (( $r )) && echo " ❔ $r ")'$c
+PS1_LOGIN=$a'3;97;100'$b'$(shopt -q login_shell || echo "🔓 non-login ")'$c
 PS1_OS=$a'1;30;47'$b" $OS_NICKNAME "$c
 
 # python venv
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-PS1_PYVENV=$a'3;97;42'$b'$([[ -n "$VIRTUAL_ENV" ]] && echo " venv@$VIRTUAL_ENV ")'$c
+PS1_PYVENV=$a'3;97;42'$b'$([[ -n "$VIRTUAL_ENV" ]] && echo "🐍 $VIRTUAL_ENV ")'$c
 
 # git
 # https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-Bash
