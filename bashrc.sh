@@ -33,7 +33,7 @@
 #                     if not $PS1 # not interactive
 #                         return # don't do anything
 #                     configure checkwinsize
-#                     configrue $debian_chroot
+#                     configure $debian_chroot
 #                     if not SUDOing
 #                         configure $PS1
 #                     print sudo hint
