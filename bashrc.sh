@@ -77,7 +77,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 # common aliases
-alias .ls='ls -alFh --time-style=long-iso --color=auto'
+alias .ls='ls --almost-all -l --classify --human-readable --time-style=long-iso --color=auto'
 alias .tree='tree -fiapughDFCN --timefmt %F_%T --du --dirsfirst'
 alias .grep='grep -E -n --color=auto'
 alias .diff='diff -y'
