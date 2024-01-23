@@ -149,34 +149,34 @@ fi
 # for PS1
 
 # OS indicator
-OS_LOGO="📶"
-OS_NICKNAME='unknown'
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
-    OS_LOGO="💻"
-    OS_NICKNAME="$WSL_DISTRO_NAME"
-elif [[ -f /etc/os-release ]]; then
-    OS_NICKNAME="$(source /etc/os-release && echo $ID-$VERSION_ID)"
+    OS_INDICATOR="WSL:"
+fi
+if [[ -f /etc/os-release ]]; then
+    OS_INDICATOR="${OS_INDICATOR}$(source /etc/os-release && echo $ID-$VERSION_ID)"
 elif [[ "$(which lsb_release 2> /dev/null)" ]]; then
-    OS_NICKNAME="$(lsb_release -is)-$(lsb_release -rs)"
+    OS_INDICATOR="${OS_INDICATOR}$(lsb_release -is)-$(lsb_release -rs)"
 elif [[ -f /etc/system-release-cpe ]]; then
-    OS_NICKNAME="$(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')"
+    OS_INDICATOR="${OS_INDICATOR}$(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')"
 elif [[ -f /etc/system-release ]]; then
-    OS_NICKNAME="$(cat /etc/system-release)"
+    OS_INDICATOR="${OS_INDICATOR}$(cat /etc/system-release)"
+else
+    OS_INDICATOR="${OS_INDICATOR}unknown"
 fi
 
 #color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
 a='\[\e[0m\]\[\e['
 b='m\]'
 c="$a"'0'"$b"
-x1="$a"'2;90;40'"$b"
+x1="$a"'2;90'"$b"
 
 # parts
-PS1_LOC=$a'92;40'$b' \u'$a'1;35;40'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;96;40'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;95;40'$b'\H'$x1':'$a'93;40'$b'$PWD '$c
+PS1_RET=$a'1;91;103'$b'$(r=$? && (( $r )) && echo " ❌$r ")'$c
+PS1_LOGIN=$a'46'$b'$(shopt -q login_shell || echo " 🔗 ")'$c
+PS1_OS=$a'3;37;100'$b" $OS_INDICATOR "$c
+PS1_LOC=$a'92'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;96'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;95'$b'\H'$x1':'$a'93'$b'$PWD '$c
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
-PS1_RET=$a'1;97;41'$b'$(r=$? && (( $r )) && echo " ❔$r ")'$c
-PS1_LOGIN=$a'3;90;47'$b'$(shopt -q login_shell || echo " non-login ")'$c
-PS1_OS=$a'2;37;100'$b" $OS_LOGO $OS_NICKNAME "$c
-unset OS_LOGO OS_NICKNAME
+unset OS_INDICATOR
 
 # python venv
 export VIRTUAL_ENV_DISABLE_PROMPT=1
@@ -197,12 +197,12 @@ for f in "${GIT_PMT_LIST[@]}"; do
     declare -rg GIT_PS1_DESCRIBE_STYLE=branch;
     declare -rg GIT_PS1_SHOWCOLORHINTS=1;
     source "$f";
-    PS1_GIT=$a'1;3;97;104'$b'$(__git_ps1 " %s ")'$c;
+    PS1_GIT=$a'3;97;104'$b'$(__git_ps1 " %s ")'$c;
     break;
 done
 
-# all
-PS1="$PS1_RET$PS1_OS$PS1_LOGIN$PS1_PYVENV$PS1_GIT$PS1_LOC$PS1_PMT"
+# all PS1
+PS1="$PS1_RET$PS1_PYVENV$PS1_GIT$PS1_LOGIN$PS1_OS$PS1_LOC$PS1_PMT"
 unset a b c x1
 unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
 
