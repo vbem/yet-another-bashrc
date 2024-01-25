@@ -174,7 +174,7 @@ x1="$a"'2;90'"$b"
 PS1_RET=$a'1;91;103'$b'$(r=$? && (( $r )) && echo " ❌$r ")'$c
 PS1_LOGIN=$a'46'$b'$(shopt -q login_shell || echo " 🔗 ")'$c
 PS1_OS=$a'3;37;100'$b" $OS_INDICATOR "$c
-PS1_LOC=$a'95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'94'$b'$PWD '$c
+PS1_LOC=$a'95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 unset OS_INDICATOR
 
@@ -208,7 +208,7 @@ unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
 
 # terminal title
 #[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1"
 
 # bash cmd history
 export HISTTIMEFORMAT="%F_%T "
