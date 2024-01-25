@@ -211,7 +211,7 @@ unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
 PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1"
 
 # bash cmd history
-export HISTTIMEFORMAT="%F_%T "
+# export HISTTIMEFORMAT="%F_%T "
 command -v hstr &> /dev/null && source <(hstr --show-configuration 2> /dev/null)
 
 # kubectl completion https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
