@@ -210,10 +210,6 @@ unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
 #[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
 PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1"
 
-# bash cmd history
-# export HISTTIMEFORMAT="%F_%T "
-command -v hstr &> /dev/null && source <(hstr --show-configuration 2> /dev/null)
-
 # kubectl completion https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
 command -v kubectl &> /dev/null && source <(kubectl completion bash 2> /dev/null)
 
@@ -226,7 +222,29 @@ command -v yq &> /dev/null && source <(yq shell-completion bash 2> /dev/null)
 # aliyun completion https://help.aliyun.com/document_detail/122038.html
 command -v aliyun &> /dev/null && complete -C "$(command -v aliyun)" aliyun
 
-# shell completions
-#which helm >& /dev/null && source <(helm completion bash 2> /dev/null)
-#which terraform >& /dev/null && complete -C "$(which terraform)" terraform
+# helm completion https://helm.sh/docs/helm/helm_completion_bash/
+command -v helm &> /dev/null && source <(helm completion bash 2> /dev/null)
+
+# terraform completion https://www.terraform.io/docs/cli/commands/index.html#shell-tab-completion
+command -v terraform &> /dev/null && complete -C "$(which terraform)" terraform
+
+# hstr setup https://github.com/dvorka/hstr?tab=readme-ov-file#configuration
+# dynamic load will swallow inputs during bash startup:
+# command -v hstr &> /dev/null && source <(hstr --show-bash-configuration 2> /dev/null)
+# so we use the following instead:
+command -v hstr &> /dev/null && {
+    alias hh=hstr                    # hh to be alias for hstr
+    export HSTR_CONFIG=hicolor       # get more colors
+    shopt -s histappend              # append new history items to .bash_history
+    export HISTCONTROL=ignorespace   # leading space hides commands from history
+    export HISTFILESIZE=10000        # increase history file size (default is 500)
+    export HISTSIZE=${HISTFILESIZE}  # increase history size (default is 500)
+    # ensure synchronization between bash memory and history file
+    export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
+    if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
+    # if this is interactive shell, then bind 'kill last command' to Ctrl-x k
+    if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
+    export HSTR_TIOCSTI=y
+}
+
 :
