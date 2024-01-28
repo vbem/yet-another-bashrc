@@ -100,7 +100,7 @@ alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
 alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
 
-# VS code
+# VS code 🆚
 alias .code='code --verbose'
 alias .code.add='.code --reuse-window --add'
 alias .code.diff='.code --reuse-window --diff'
@@ -116,7 +116,7 @@ alias .code.tunnel.service.status='systemctl --user status code-tunnel.service'
 alias .code.tunnel.service.uninstall='.code.tunnel.service uninstall && .code.tunnel.unregister && systemctl --user daemon-reload'
 alias .code.tunnel.service.install='systemctl --user daemon-reload && .code.tunnel.service install --accept-server-license-terms --name "${HOSTNAME}" && .code.tunnel.service.ls && sudo loginctl enable-linger "$USER"' # https://wiki.archlinux.org/title/systemd/User
 
-# cloud aliases
+# cloud aliases 🆑
 if timeout 0.1 curl -s -m 1 http://100.100.100.200 > /dev/null; then
     alias .aliyun.use.role='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
     alias .aliyun.set.role='aliyun configure set --profile default --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
@@ -172,7 +172,7 @@ x1="$a"'2;90'"$b"
 
 # parts
 PS1_RET=$a'1;91;103'$b'$(r=$? && (( $r )) && echo " ❌$r ")'$c
-PS1_LOGIN=$a'46'$b'$(shopt -q login_shell || echo " 🔗 ")'$c
+PS1_LOGIN=$a'46'$b'$(shopt -q login_shell || echo " ♻️ ")'$c
 PS1_OS=$a'3;37;100'$b" $OS_INDICATOR "$c
 PS1_LOC=$a'95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
