@@ -98,7 +98,9 @@ alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
 alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
 alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
 alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
+alias .docker.system.prune='docker system prune --all --force --volumes'
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
+alias .clean.cache.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.python_history ~/*-ks.cfg ~/.cache/ ~/.pki/ ~/.oracle_jre_usage/ ~/.config/htop/'
 
 # VS code 🆚
 alias .code='code --verbose'
