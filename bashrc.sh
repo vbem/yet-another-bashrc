@@ -82,9 +82,22 @@ alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
 alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
 alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
 alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
-alias .docker.system.prune='docker system prune --all --force --volumes'
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
-alias .clean.cache.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.python_history ~/*-ks.cfg ~/.cache/ ~/.pki/ ~/.oracle_jre_usage/ ~/.config/htop/'
+alias .clean.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.python_history ~/*-ks.cfg ~/.cache/ ~/.pki/ ~/.oracle_jre_usage/ ~/.config/htop/'
+
+# docker 🐳
+alias .docker.system.prune='docker system prune --all --force --volumes'
+alias .docker.decode='jq -Mcre ".auths|to_entries[]|.key+\"\t\"+(.value.auth|@base64d)" ~/.docker/config.json'
+
+# dnf 🐧
+alias .dnf.cache='sudo dnf clean all && sudo dnf makecache'
+alias .dnf.upgrade='sudo dnf upgrade --refresh'
+alias .dnf.repolist='dnf repolist --all'
+alias .dnf.repo-pkgs='dnf repo-pkgs'
+alias .repoquery.list='dnf repoquery --list'
+alias .repoquery.file='dnf repoquery --file'
+alias .repoquery.requires='dnf repoquery --requires'
+alias .repoquery.whatrequires='dnf repoquery --whatrequires'
 
 # Git 🐙
 alias .git.log='git log --graph --all --decorate --oneline'
@@ -108,7 +121,7 @@ alias .code.tunnel.service.status='systemctl --user status code-tunnel.service'
 alias .code.tunnel.service.uninstall='.code.tunnel.service uninstall && .code.tunnel.unregister && systemctl --user daemon-reload'
 alias .code.tunnel.service.install='systemctl --user daemon-reload && .code.tunnel.service install --accept-server-license-terms --name "${HOSTNAME}" && .code.tunnel.service.ls && sudo loginctl enable-linger "$USER"' # https://wiki.archlinux.org/title/systemd/User
 
-# cloud aliases 🆑
+# cloud aliases ☁️
 if timeout 0.1 curl -s -m 1 http://100.100.100.200 > /dev/null; then
     alias .aliyun.use.role='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
     alias .aliyun.set.role='aliyun configure set --profile default --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
@@ -158,18 +171,22 @@ export GROFF_NO_SGR=1
 
 # OS indicator
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
-    OS_INDICATOR="WSL:"
+    OS_INDICATOR="💻"
+elif [[ -f /.dockerenv ]]; then
+    OS_INDICATOR="🐳"
+else
+    OS_INDICATOR="☁️"
 fi
 if [[ -f /etc/os-release ]]; then
-    OS_INDICATOR="${OS_INDICATOR}$(source /etc/os-release && echo $ID-$VERSION_ID)"
+    OS_INDICATOR="${OS_INDICATOR} $(source /etc/os-release && echo $ID-$VERSION_ID)"
 elif [[ "$(which lsb_release 2> /dev/null)" ]]; then
-    OS_INDICATOR="${OS_INDICATOR}$(lsb_release -is)-$(lsb_release -rs)"
+    OS_INDICATOR="${OS_INDICATOR} $(lsb_release -is)-$(lsb_release -rs)"
 elif [[ -f /etc/system-release-cpe ]]; then
-    OS_INDICATOR="${OS_INDICATOR}$(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')"
+    OS_INDICATOR="${OS_INDICATOR} $(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')"
 elif [[ -f /etc/system-release ]]; then
-    OS_INDICATOR="${OS_INDICATOR}$(cat /etc/system-release)"
+    OS_INDICATOR="${OS_INDICATOR} $(cat /etc/system-release)"
 else
-    OS_INDICATOR="${OS_INDICATOR}unknown"
+    OS_INDICATOR="${OS_INDICATOR} ❔"
 fi
 
 #color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
@@ -179,10 +196,16 @@ c="$a"'0'"$b"
 x1="$a"'2;90'"$b"
 
 # parts
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+    PS1_LOGIN=$a'46'$b' 🆚 '$c
+elif ! shopt -q login_shell; then
+    PS1_LOGIN=$a'46'$b' 🔓 '$c
+else
+    PS1_LOGIN=''
+fi
 PS1_RET=$a'1;91;103'$b'$(r=$? && (( $r )) && echo " ⛔ $r ")'$c
-PS1_LOGIN=$a'46'$b'$(shopt -q login_shell || echo " 🔓 ")'$c
-PS1_OS=$a'3;37;100'$b" $OS_INDICATOR "$c
-PS1_LOC=$a'95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
+PS1_OS=$a'37;100'$b" $OS_INDICATOR "$c
+PS1_LOC=$a'3;95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 unset OS_INDICATOR
 
