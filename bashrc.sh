@@ -61,21 +61,6 @@
 [[ -v YET_ANOTHER_BASHRC ]] && return # # avoid duplicated source
 YET_ANOTHER_BASHRC="$(realpath ${BASH_SOURCE[0]})" && declare -rg YET_ANOTHER_BASHRC # sourced sentinel
 
-# Do not pipe output into a pager, see `man systemctl`
-export SYSTEMD_PAGER=''
-
-# https://git-scm.com/docs/git#Documentation/git.txt-codeGITPAGERcode
-export GIT_PAGER=''
-
-# colorful manpage
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
-
 # common aliases
 alias .ls='ls --almost-all -l --classify --human-readable --time-style=long-iso --color=auto'
 alias .tree='tree -fiapughDFCN --timefmt %F_%T --du --dirsfirst'
@@ -91,7 +76,6 @@ alias .grep.code='grep -E -v "^[[:space:]]*$|^[[:space:]]*#"'
 alias .nginx.reload='sudo nginx -t && sudo systemctl reload nginx'
 alias .curl.header='curl -sv -o /dev/null'
 alias .curl.ip='curl -s -4 myip.ipip.net'
-alias .git.log='git log --graph --all --decorate --oneline'
 alias .venv.clear='python3 -m venv --clear'
 function .venv.activate { . $1/bin/activate; }
 alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
@@ -101,6 +85,12 @@ alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automag
 alias .docker.system.prune='docker system prune --all --force --volumes'
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
 alias .clean.cache.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.python_history ~/*-ks.cfg ~/.cache/ ~/.pki/ ~/.oracle_jre_usage/ ~/.config/htop/'
+
+# Git 🐙
+alias .git.log='git log --graph --all --decorate --oneline'
+alias .git.config.local.user.name='git config --local user.name'
+alias .git.config.local.user.email='git config --local user.email'
+alias .git.config.local.list='git config --local --list'
 
 # VS code 🆚
 alias .code='code --verbose'
@@ -147,6 +137,22 @@ elif timeout 0.1 curl -s -m 1 http://169.254.169.25 > /dev/null; then
     alias .ec2.userdata='curl -s 169.254.169.254/latest/user-data'
     alias .ec2.tags='aws ec2 --region $(curl -s 169.254.169.254/latest/dynamic/instance-identity/document|jq -Mrc .region) describe-tags --filters Name=resource-id,Values=$(curl -s 169.254.169.254/latest/meta-data/instance-id) | jq -Mrc "[.Tags[]|{(.Key):.Value}]|add"'
 fi
+
+# Do not pipe output into a pager, see `man systemctl`
+export SYSTEMD_PAGER=''
+
+# https://git-scm.com/docs/git#Documentation/git.txt-codeGITPAGERcode
+export GIT_PAGER=''
+
+# colorful manpage
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export GROFF_NO_SGR=1
 
 # for PS1
 
