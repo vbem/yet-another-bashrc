@@ -179,8 +179,8 @@ c="$a"'0'"$b"
 x1="$a"'2;90'"$b"
 
 # parts
-PS1_RET=$a'1;91;103'$b'$(r=$? && (( $r )) && echo " ❌$r ")'$c
-PS1_LOGIN=$a'46'$b'$(shopt -q login_shell || echo " ♻️ ")'$c
+PS1_RET=$a'1;91;103'$b'$(r=$? && (( $r )) && echo " ⛔ $r ")'$c
+PS1_LOGIN=$a'46'$b'$(shopt -q login_shell || echo " 🔓 ")'$c
 PS1_OS=$a'3;37;100'$b" $OS_INDICATOR "$c
 PS1_LOC=$a'95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
