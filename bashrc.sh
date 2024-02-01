@@ -87,6 +87,7 @@ alias .clean.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.python_history ~
 
 # docker 🐳
 alias .docker.system.prune='docker system prune --all --force --volumes'
+alias .docker.volume.prune='docker volume prune --all --force'
 alias .docker.decode='jq -Mcre ".auths|to_entries[]|.key+\"\t\"+(.value.auth|@base64d)" ~/.docker/config.json'
 
 # dnf 🐧
@@ -169,45 +170,44 @@ export GROFF_NO_SGR=1
 
 # for PS1
 
-# OS indicator
-if [[ -n "$WSL_DISTRO_NAME" ]]; then
-    OS_INDICATOR="💻"
-elif [[ -f /.dockerenv ]]; then
-    OS_INDICATOR="🐳"
-else
-    OS_INDICATOR="☁️"
-fi
-if [[ -f /etc/os-release ]]; then
-    OS_INDICATOR="${OS_INDICATOR} $(source /etc/os-release && echo $ID-$VERSION_ID)"
-elif [[ "$(which lsb_release 2> /dev/null)" ]]; then
-    OS_INDICATOR="${OS_INDICATOR} $(lsb_release -is)-$(lsb_release -rs)"
-elif [[ -f /etc/system-release-cpe ]]; then
-    OS_INDICATOR="${OS_INDICATOR} $(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')"
-elif [[ -f /etc/system-release ]]; then
-    OS_INDICATOR="${OS_INDICATOR} $(cat /etc/system-release)"
-else
-    OS_INDICATOR="${OS_INDICATOR} ❔"
-fi
-
 #color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
 a='\[\e[0m\]\[\e['
 b='m\]'
 c="$a"'0'"$b"
 x1="$a"'2;90'"$b"
 
-# parts
-if [[ "$TERM_PROGRAM" == "vscode" ]]; then
-    PS1_LOGIN=$a'46'$b' 🆚 '$c
-elif ! shopt -q login_shell; then
-    PS1_LOGIN=$a'46'$b' 🔓 '$c
+if [[ -n "$WSL_DISTRO_NAME" ]]; then
+    RAW_INDICATOR="💻"
+elif [[ -f /.dockerenv ]]; then
+    RAW_INDICATOR="🐳"
 else
-    PS1_LOGIN=''
+    RAW_INDICATOR="☁️"
 fi
+shopt -q login_shell || RAW_INDICATOR+=' 🔓'
+[[ "$TERM_PROGRAM" == "vscode" ]] && RAW_INDICATOR+=' 🆚'
+PS1_INDICATOR=$a'100'$b" $RAW_INDICATOR "$c
+
+if [[ -f /etc/os-release ]]; then
+    RAW_OS+="$(source /etc/os-release && echo $ID-$VERSION_ID)"
+elif [[ "$(which lsb_release 2> /dev/null)" ]]; then
+    RAW_OS+="$(lsb_release -is)-$(lsb_release -rs)"
+elif [[ -f /etc/system-release-cpe ]]; then
+    RAW_OS+="$(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')"
+elif [[ -f /etc/system-release ]]; then
+    RAW_OS+="$(cat /etc/system-release)"
+else
+    RAW_OS+="unknown"
+fi
+PS1_OS=$a'3;37;46'$b" $RAW_OS "$c
+
+# latest exit code
 PS1_RET=$a'1;91;103'$b'$(r=$? && (( $r )) && echo " ⛔ $r ")'$c
-PS1_OS=$a'37;100'$b" $OS_INDICATOR "$c
+
+# location
 PS1_LOC=$a'3;95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
+
+# prompt
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
-unset OS_INDICATOR
 
 # python venv
 export VIRTUAL_ENV_DISABLE_PROMPT=1
@@ -233,9 +233,9 @@ for f in "${GIT_PMT_LIST[@]}"; do
 done
 
 # all PS1
-PS1="$PS1_RET$PS1_PYVENV$PS1_GIT$PS1_LOGIN$PS1_OS$PS1_LOC$PS1_PMT"
+PS1="$PS1_RET$PS1_PYVENV$PS1_GIT$PS1_INDICATOR$PS1_OS$PS1_LOC$PS1_PMT"
 unset a b c x1
-unset GIT_PMT_LIST PS1_RET PS1_LOC PS1_PMT PS1_LOGIN PS1_PYVENV PS1_GIT PS1_OS
+unset RAW_INDICATOR RAW_OS GIT_PMT_LIST PS1_INDICATOR PS1_RET PS1_OS PS1_LOC PS1_PMT PS1_PYVENV PS1_GIT
 
 # terminal title
 #[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
