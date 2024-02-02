@@ -87,7 +87,11 @@ alias .clean.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.python_history ~
 
 # docker 🐳
 alias .docker.system.prune='docker system prune --all --force --volumes'
+alias .docker.container.prune='docker container prune --force'
+alias .docker.network.prune='docker network prune --force'
+alias .docker.image.prune='docker image prune --all --force'
 alias .docker.volume.prune='docker volume prune --all --force'
+alias .docker.history='docker history --no-trunc'
 alias .docker.decode='jq -Mcre ".auths|to_entries[]|.key+\"\t\"+(.value.auth|@base64d)" ~/.docker/config.json'
 
 # dnf 🐧
