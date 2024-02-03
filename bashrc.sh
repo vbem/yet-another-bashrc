@@ -187,8 +187,8 @@ elif [[ -f /.dockerenv ]]; then
 else
     RAW_INDICATOR="☁️"
 fi
-shopt -q login_shell || RAW_INDICATOR+=' 🔓'
 [[ "$TERM_PROGRAM" == "vscode" ]] && RAW_INDICATOR+=' 🆚'
+shopt -q login_shell || RAW_INDICATOR+=' 🔓'
 PS1_INDICATOR=$a'100'$b" $RAW_INDICATOR "$c
 
 if [[ -f /etc/os-release ]]; then
