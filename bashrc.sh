@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2034,SC1090,SC2154
+# shellcheck disable=SC2034,SC1090,SC1091,SC2016
 # https://github.com/vbem/yet-another-bashrc
 
 # Loading order of bashrc mentioned in 'man bash':
@@ -59,7 +59,7 @@
 
 [[ $- == *i* ]] || return # must interactive shell
 [[ -v YET_ANOTHER_BASHRC ]] && return # # avoid duplicated source
-YET_ANOTHER_BASHRC="$(realpath ${BASH_SOURCE[0]})" && declare -rg YET_ANOTHER_BASHRC # sourced sentinel
+YET_ANOTHER_BASHRC="$(realpath "${BASH_SOURCE[0]}")" && declare -r YET_ANOTHER_BASHRC # sourced sentinel
 
 # common aliases
 alias .ls='ls --almost-all -l --classify --human-readable --time-style=long-iso --color=auto'
@@ -77,7 +77,7 @@ alias .nginx.reload='sudo nginx -t && sudo systemctl reload nginx'
 alias .curl.header='curl -sv -o /dev/null'
 alias .curl.ip='curl -s -4 myip.ipip.net'
 alias .venv.clear='python3 -m venv --clear'
-function .venv.activate { . $1/bin/activate; }
+function .venv.activate { . "$1"/bin/activate; }
 alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
 alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
 alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
@@ -192,11 +192,11 @@ shopt -q login_shell || RAW_INDICATOR+=' 🔓'
 PS1_INDICATOR=$a'100'$b" $RAW_INDICATOR "$c
 
 if [[ -f /etc/os-release ]]; then
-    RAW_OS+="$(source /etc/os-release && echo $ID-$VERSION_ID)"
-elif [[ "$(which lsb_release 2> /dev/null)" ]]; then
+    RAW_OS+="$(source /etc/os-release && echo "$ID-$VERSION_ID")"
+elif [[ -n "$(command -v lsb_release 2> /dev/null)" ]]; then
     RAW_OS+="$(lsb_release -is)-$(lsb_release -rs)"
 elif [[ -f /etc/system-release-cpe ]]; then
-    RAW_OS+="$(cat /etc/system-release-cpe | awk -F: '{ print $3"-"$5 }')"
+    RAW_OS+="$(awk -F: '{ print $3"-"$5 }' < /etc/system-release-cpe)"
 elif [[ -f /etc/system-release ]]; then
     RAW_OS+="$(cat /etc/system-release)"
 else
@@ -225,12 +225,12 @@ GIT_PMT_LIST=(
 )
 for f in "${GIT_PMT_LIST[@]}"; do
     [[ ! -r "$f" ]] && continue
-    declare -rg GIT_PS1_SHOWDIRTYSTATE=1;
-    declare -rg GIT_PS1_SHOWSTASHSTATE=1;
-    declare -rg GIT_PS1_SHOWUNTRACKEDFILES=1;
-    declare -rg GIT_PS1_SHOWUPSTREAM="verbose legacy git";
-    declare -rg GIT_PS1_DESCRIBE_STYLE=branch;
-    declare -rg GIT_PS1_SHOWCOLORHINTS=1;
+    declare -r GIT_PS1_SHOWDIRTYSTATE=1;
+    declare -r GIT_PS1_SHOWSTASHSTATE=1;
+    declare -r GIT_PS1_SHOWUNTRACKEDFILES=1;
+    declare -r GIT_PS1_SHOWUPSTREAM="verbose legacy git";
+    declare -r GIT_PS1_DESCRIBE_STYLE=branch;
+    declare -r GIT_PS1_SHOWCOLORHINTS=1;
     source "$f";
     PS1_GIT=$a'3;97;104'$b'$(__git_ps1 " %s ")'$c;
     break;
@@ -261,7 +261,7 @@ command -v aliyun &> /dev/null && complete -C "$(command -v aliyun)" aliyun
 command -v helm &> /dev/null && source <(helm completion bash 2> /dev/null)
 
 # terraform completion https://www.terraform.io/docs/cli/commands/index.html#shell-tab-completion
-command -v terraform &> /dev/null && complete -C "$(which terraform)" terraform
+command -v terraform &> /dev/null && complete -C "$(command -v terraform)" terraform
 
 # hstr setup https://github.com/dvorka/hstr?tab=readme-ov-file#configuration
 # dynamic load will swallow inputs during bash startup:
