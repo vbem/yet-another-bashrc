@@ -57,9 +57,12 @@
 #     source ~/.bashrc
 #         SEE ABOVE
 
-[[ $- == *i* ]] || return # must interactive shell
-[[ -v YET_ANOTHER_BASHRC ]] && return # # avoid duplicated source
-YET_ANOTHER_BASHRC="$(realpath "${BASH_SOURCE[0]}")" && declare -r YET_ANOTHER_BASHRC # sourced sentinel
+# must interactive shell
+[[ $- == *i* ]] || return
+# avoid duplicated source
+[[ -v YET_ANOTHER_BASHRC ]] && return
+# sourced sentinel
+YET_ANOTHER_BASHRC="$(realpath "${BASH_SOURCE[0]}")" && declare -r YET_ANOTHER_BASHRC
 
 # common aliases
 alias .ls='ls --almost-all -l --classify --human-readable --time-style=long-iso --color=auto'
@@ -84,6 +87,8 @@ alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
 alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
 alias .clean.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.python_history ~/*-ks.cfg ~/.cache/ ~/.pki/ ~/.oracle_jre_usage/ ~/.config/htop/'
+alias .imgcat='curl -Ls "https://iterm2.com/utilities/imgcat" | bash -s --'
+alias .go.install=$'sudo rm -rf /usr/local/go/ && curl -L https://go.dev/dl/go1.22.0.linux-amd64.tar.gz | sudo tar --directory /usr/local/ --extract --gzip && echo \'export PATH=$PATH:/usr/local/go/bin\' >/etc/profile.d/golang.sh && source /etc/profile.d/golang.sh'
 
 # docker 🐳
 alias .docker.system.prune='docker system prune --all --force --volumes'
@@ -127,7 +132,7 @@ alias .code.tunnel.service.uninstall='.code.tunnel.service uninstall && .code.tu
 alias .code.tunnel.service.install='systemctl --user daemon-reload && .code.tunnel.service install --accept-server-license-terms --name "${HOSTNAME}" && .code.tunnel.service.ls && sudo loginctl enable-linger "$USER"' # https://wiki.archlinux.org/title/systemd/User
 
 # cloud aliases ☁️
-if timeout 0.1 curl -s -m 1 http://100.100.100.200 > /dev/null; then
+if timeout 0.1 curl -s -m 1 http://100.100.100.200 >/dev/null; then
     alias .aliyun.use.role='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
     alias .aliyun.set.role='aliyun configure set --profile default --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id)'
     alias .ecs.account='curl -s 100.100.100.200/latest/meta-data/owner-account-id'
@@ -141,7 +146,7 @@ if timeout 0.1 curl -s -m 1 http://100.100.100.200 > /dev/null; then
     alias .ecs.role='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/'
     alias .ecs.sts='curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/$(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/)'
     alias .ecs.tags='aliyun --mode EcsRamRole --ram-role-name $(curl -s 100.100.100.200/latest/meta-data/ram/security-credentials/) --region $(curl -s 100.100.100.200/latest/meta-data/region-id) ecs DescribeInstances --InstanceIds ["\"$(curl -s 100.100.100.200/latest/meta-data/instance-id)\""] | jq -Mcr "[.Instances.Instance[].Tags.Tag[]|{(.TagKey):.TagValue}]|add"'
-elif timeout 0.1 curl -s -m 1 http://169.254.169.25 > /dev/null; then
+elif timeout 0.1 curl -s -m 1 http://169.254.169.25 >/dev/null; then
     alias .ec2.document='curl -s 169.254.169.254/latest/dynamic/instance-identity/document'
     alias .ec2.region="curl -s 169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//'"
     alias .ec2.az='curl -s 169.254.169.254/latest/meta-data/placement/availability-zone'
@@ -193,10 +198,10 @@ PS1_INDICATOR=$a'100'$b" $RAW_INDICATOR "$c
 
 if [[ -f /etc/os-release ]]; then
     RAW_OS+="$(source /etc/os-release && echo "$ID-$VERSION_ID")"
-elif [[ -n "$(command -v lsb_release 2> /dev/null)" ]]; then
+elif [[ -n "$(command -v lsb_release 2>/dev/null)" ]]; then
     RAW_OS+="$(lsb_release -is)-$(lsb_release -rs)"
 elif [[ -f /etc/system-release-cpe ]]; then
-    RAW_OS+="$(awk -F: '{ print $3"-"$5 }' < /etc/system-release-cpe)"
+    RAW_OS+="$(awk -F: '{ print $3"-"$5 }' </etc/system-release-cpe)"
 elif [[ -f /etc/system-release ]]; then
     RAW_OS+="$(cat /etc/system-release)"
 else
@@ -208,7 +213,7 @@ PS1_OS=$a'3;37;46'$b" $RAW_OS "$c
 PS1_RET=$a'1;91;103'$b'$(r=$? && (( $r )) && echo " ⛔ $r ")'$c
 
 # location
-PS1_LOC=$a'3;95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I|cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
+PS1_LOC=$a'3;95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I | cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
 
 # prompt
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
@@ -225,15 +230,15 @@ GIT_PMT_LIST=(
 )
 for f in "${GIT_PMT_LIST[@]}"; do
     [[ ! -r "$f" ]] && continue
-    declare -r GIT_PS1_SHOWDIRTYSTATE=1;
-    declare -r GIT_PS1_SHOWSTASHSTATE=1;
-    declare -r GIT_PS1_SHOWUNTRACKEDFILES=1;
-    declare -r GIT_PS1_SHOWUPSTREAM="verbose legacy git";
-    declare -r GIT_PS1_DESCRIBE_STYLE=branch;
-    declare -r GIT_PS1_SHOWCOLORHINTS=1;
-    source "$f";
-    PS1_GIT=$a'3;97;104'$b'$(__git_ps1 " %s ")'$c;
-    break;
+    declare -r GIT_PS1_SHOWDIRTYSTATE=1
+    declare -r GIT_PS1_SHOWSTASHSTATE=1
+    declare -r GIT_PS1_SHOWUNTRACKEDFILES=1
+    declare -r GIT_PS1_SHOWUPSTREAM="verbose legacy git"
+    declare -r GIT_PS1_DESCRIBE_STYLE=branch
+    declare -r GIT_PS1_SHOWCOLORHINTS=1
+    source "$f"
+    PS1_GIT=$a'3;97;104'$b'$(__git_ps1 " %s ")'$c
+    break
 done
 
 # all PS1
@@ -246,34 +251,34 @@ unset RAW_INDICATOR RAW_OS GIT_PMT_LIST PS1_INDICATOR PS1_RET PS1_OS PS1_LOC PS1
 PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1"
 
 # kubectl completion https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
-command -v kubectl &> /dev/null && source <(kubectl completion bash 2> /dev/null)
+command -v kubectl &>/dev/null && source <(kubectl completion bash 2>/dev/null)
 
 # rclone completion https://rclone.org/commands/rclone_completion/
-command -v rclone &> /dev/null && source <(RCLONE_CONFIG=/dev/null rclone completion bash 2> /dev/null)
+command -v rclone &>/dev/null && source <(RCLONE_CONFIG=/dev/null rclone completion bash 2>/dev/null)
 
 # yq completion https://mikefarah.gitbook.io/yq/commands/shell-completion#bash-default
-command -v yq &> /dev/null && source <(yq shell-completion bash 2> /dev/null)
+command -v yq &>/dev/null && source <(yq shell-completion bash 2>/dev/null)
 
 # aliyun completion https://help.aliyun.com/document_detail/122038.html
-command -v aliyun &> /dev/null && complete -C "$(command -v aliyun)" aliyun
+command -v aliyun &>/dev/null && complete -C "$(command -v aliyun)" aliyun
 
 # helm completion https://helm.sh/docs/helm/helm_completion_bash/
-command -v helm &> /dev/null && source <(helm completion bash 2> /dev/null)
+command -v helm &>/dev/null && source <(helm completion bash 2>/dev/null)
 
 # terraform completion https://www.terraform.io/docs/cli/commands/index.html#shell-tab-completion
-command -v terraform &> /dev/null && complete -C "$(command -v terraform)" terraform
+command -v terraform &>/dev/null && complete -C "$(command -v terraform)" terraform
 
 # hstr setup https://github.com/dvorka/hstr?tab=readme-ov-file#configuration
 # dynamic load will swallow inputs during bash startup:
 # command -v hstr &> /dev/null && source <(hstr --show-bash-configuration 2> /dev/null)
 # so we use the following instead:
-command -v hstr &> /dev/null && {
-    alias hh=hstr                    # hh to be alias for hstr
-    export HSTR_CONFIG=hicolor       # get more colors
-    shopt -s histappend              # append new history items to .bash_history
-    export HISTCONTROL=ignorespace   # leading space hides commands from history
-    export HISTFILESIZE=10000        # increase history file size (default is 500)
-    export HISTSIZE=${HISTFILESIZE}  # increase history size (default is 500)
+command -v hstr &>/dev/null && {
+    alias hh=hstr                   # hh to be alias for hstr
+    export HSTR_CONFIG=hicolor      # get more colors
+    shopt -s histappend             # append new history items to .bash_history
+    export HISTCONTROL=ignorespace  # leading space hides commands from history
+    export HISTFILESIZE=10000       # increase history file size (default is 500)
+    export HISTSIZE=${HISTFILESIZE} # increase history size (default is 500)
     # ensure synchronization between bash memory and history file
     export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
     if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
