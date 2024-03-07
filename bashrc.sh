@@ -88,7 +88,11 @@ alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automag
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
 alias .clean.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.python_history ~/*-ks.cfg ~/.cache/ ~/.pki/ ~/.oracle_jre_usage/ ~/.config/htop/'
 alias .imgcat='curl -Ls "https://iterm2.com/utilities/imgcat" | bash -s --'
-alias .go.setup.system=$'sudo rm -rf /usr/local/go/ && curl -L https://go.dev/dl/$(curl -Ls https://go.dev/dl/?mode=json | jq -Mcre ".[0].version").linux-amd64.tar.gz | sudo tar --directory /usr/local/ --extract --gzip && echo \'export PATH=$PATH:/usr/local/go/bin\' >/etc/profile.d/golang.sh && source /etc/profile.d/golang.sh && go version'
+alias .go.setup.system=$'sudo rm -rf /usr/local/go/ && curl -L https://go.dev/dl/$(curl -Ls https://go.dev/dl/?mode=json | jq -Mcre ".[0].version").linux-amd64.tar.gz | sudo tar --directory /usr/local/ --extract --gzip && sudo tee /etc/profile.d/golang.sh <<< \'export PATH=$PATH:/usr/local/go/bin\' >/dev/null && source /etc/profile.d/golang.sh && go version'
+alias .go.setup.user=$'rm -rf ~/.local/go/ && mkdir -p ~/.local/go/ \
+  && curl -L https://go.dev/dl/$(curl -Ls https://go.dev/dl/?mode=json | jq -Mcre ".[0].version").linux-amd64.tar.gz \
+  | tar --directory ~/.local/ --extract --gzip \
+  && echo \'export PATH=$PATH:~/.local/go/bin\''
 
 # docker 🐳
 alias .docker.system.prune='docker system prune --all --force --volumes'
