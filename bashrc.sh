@@ -272,6 +272,9 @@ command -v helm &>/dev/null && source <(helm completion bash 2>/dev/null)
 # terraform completion https://www.terraform.io/docs/cli/commands/index.html#shell-tab-completion
 command -v terraform &>/dev/null && complete -C "$(command -v terraform)" terraform
 
+# Go Command completion https://pkg.go.dev/github.com/posener/complete/v2
+command -v go &>/dev/null && gocomplete="$(go env GOPATH)/bin/gocomplete" && [[ -x "$gocomplete" ]] && { complete -C "$gocomplete" go; unset gocomplete; }
+
 # hstr setup https://github.com/dvorka/hstr?tab=readme-ov-file#configuration
 # dynamic load will swallow inputs during bash startup:
 # command -v hstr &> /dev/null && source <(hstr --show-bash-configuration 2> /dev/null)
