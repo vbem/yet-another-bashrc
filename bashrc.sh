@@ -79,20 +79,24 @@ alias .grep.code='grep -E -v "^[[:space:]]*$|^[[:space:]]*#"'
 alias .nginx.reload='sudo nginx -t && sudo systemctl reload nginx'
 alias .curl.header='curl -sv -o /dev/null'
 alias .curl.ip='curl -s -4 myip.ipip.net'
-alias .venv.clear='python3 -m venv --clear'
-function .venv.activate { . "$1"/bin/activate; }
-alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
-alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
-alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
-alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
 alias .clean.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.python_history ~/*-ks.cfg ~/.cache/ ~/.pki/ ~/.oracle_jre_usage/ ~/.config/htop/'
 alias .imgcat='curl -Ls "https://iterm2.com/utilities/imgcat" | bash -s --'
+
+# golang 🐹
 alias .go.setup.system=$'sudo rm -rf /usr/local/go/ && curl -L https://go.dev/dl/$(curl -Ls https://go.dev/dl/?mode=json | jq -Mcre ".[0].version").linux-amd64.tar.gz | sudo tar --directory /usr/local/ --extract --gzip && sudo tee /etc/profile.d/golang.sh <<< \'export PATH=$PATH:/usr/local/go/bin\' >/dev/null && source /etc/profile.d/golang.sh && go version'
 alias .go.setup.user=$'rm -rf ~/.local/go/ && mkdir -p ~/.local/go/ \
   && curl -L https://go.dev/dl/$(curl -Ls https://go.dev/dl/?mode=json | jq -Mcre ".[0].version").linux-amd64.tar.gz \
   | tar --directory ~/.local/ --extract --gzip \
   && echo \'export PATH=$PATH:~/.local/go/bin\''
+
+# python 🐍
+alias .venv.create='python3 -m venv --clear --without-pip'
+function .venv.activate { . "$1"/bin/activate; }
+alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
+alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
+alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
+alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
 
 # docker 🐳
 alias .docker.system.prune='docker system prune --all --force --volumes'
@@ -224,7 +228,7 @@ PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 
 # python venv
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-PS1_PYVENV=$a'97;42'$b'$([[ -n "$VIRTUAL_ENV" ]] && echo " 🐍$VIRTUAL_ENV ")'$c
+PS1_PYVENV=$a'97;42'$b'$([[ -n "$VIRTUAL_ENV" ]] && x="${VIRTUAL_ENV%/.venv}" && echo " 🐍 ${x##*/} ")'$c
 
 # git
 # https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-Bash
