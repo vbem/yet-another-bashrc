@@ -187,50 +187,20 @@ export GROFF_NO_SGR=1
 
 # for PS1
 
-#color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
+# color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
 a='\[\e[0m\]\[\e['
 b='m\]'
 c="$a"'0'"$b"
 x1="$a"'2;90'"$b"
 
-if [[ -n "$WSL_DISTRO_NAME" ]]; then
-    RAW_INDICATOR="💻"
-elif [[ -f /.dockerenv ]]; then
-    RAW_INDICATOR="🐳"
-else
-    RAW_INDICATOR="☁️"
-fi
-[[ "$TERM_PROGRAM" == "vscode" ]] && RAW_INDICATOR+=' 🆚'
-shopt -q login_shell || RAW_INDICATOR+=' 🔓'
-PS1_INDICATOR=$a'100'$b" $RAW_INDICATOR "$c
-
-if [[ -f /etc/os-release ]]; then
-    RAW_OS+="$(source /etc/os-release && echo "$ID-$VERSION_ID")"
-elif [[ -n "$(command -v lsb_release 2>/dev/null)" ]]; then
-    RAW_OS+="$(lsb_release -is)-$(lsb_release -rs)"
-elif [[ -f /etc/system-release-cpe ]]; then
-    RAW_OS+="$(awk -F: '{ print $3"-"$5 }' </etc/system-release-cpe)"
-elif [[ -f /etc/system-release ]]; then
-    RAW_OS+="$(cat /etc/system-release)"
-else
-    RAW_OS+="unknown"
-fi
-PS1_OS=$a'3;37;46'$b" $RAW_OS "$c
-
-# latest exit code
+# error return code indicator
 PS1_RET=$a'1;91;103'$b'$(r=$? && (( $r )) && echo " ⛔ $r ")'$c
 
-# location
-PS1_LOC=$a'3;95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I | cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
-
-# prompt
-PS1_PMT='\n'$a'1;31'$b'\$'$c' '
-
-# python venv
+# python venv indicator
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 PS1_PYVENV=$a'97;42'$b'$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo " 🐍 $v ${p##*/} "; })'$c
 
-# git
+# git indicator
 # https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-Bash
 # https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
 GIT_PMT_LIST=(
@@ -245,14 +215,50 @@ for f in "${GIT_PMT_LIST[@]}"; do
     declare -r GIT_PS1_DESCRIBE_STYLE=branch
     declare -r GIT_PS1_SHOWCOLORHINTS=1
     source "$f"
-    PS1_GIT=$a'3;97;104'$b'$(__git_ps1 " %s ")'$c
+    PS1_GIT=$a'97;104'$b'$(__git_ps1 " 🔀 %s ")'$c
     break
 done
+unset GIT_PMT_LIST
+
+# OS indicator
+if [[ -n "$WSL_DISTRO_NAME" ]]; then
+    RAW_OS="💻"
+elif [[ -f /.dockerenv ]]; then
+    RAW_OS="🐳"
+else
+    RAW_OS="☁️"
+fi
+if [[ -f /etc/os-release ]]; then
+    RAW_OS+=" $(source /etc/os-release && echo "$ID-$VERSION_ID")"
+elif [[ -n "$(command -v lsb_release 2>/dev/null)" ]]; then
+    RAW_OS+=" $(lsb_release -is)-$(lsb_release -rs)"
+elif [[ -f /etc/system-release-cpe ]]; then
+    RAW_OS+=" $(awk -F: '{ print $3"-"$5 }' </etc/system-release-cpe)"
+elif [[ -f /etc/system-release ]]; then
+    RAW_OS+=" $(cat /etc/system-release)"
+else
+    RAW_OS+=" unknown"
+fi
+PS1_OS=$a'37;46'$b" $RAW_OS "$c
+unset RAW_OS
+
+# other indicators
+RAW_OTHERS=''
+[[ "$TERM_PROGRAM" == "vscode" ]] && RAW_OTHERS+=' 🆚'
+shopt -q login_shell || RAW_OTHERS+=' 🔓'
+[[ -n "$RAW_OTHERS" ]] && PS1_INDICATOR=$a'100'$b"$RAW_OTHERS "$c
+unset RAW_OTHERS
+
+# location indicator
+PS1_LOC=$a'3;95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I | cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
+
+# prompt
+PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 
 # all PS1
-PS1="$PS1_RET$PS1_PYVENV$PS1_GIT$PS1_INDICATOR$PS1_OS$PS1_LOC$PS1_PMT"
 unset a b c x1
-unset RAW_INDICATOR RAW_OS GIT_PMT_LIST PS1_INDICATOR PS1_RET PS1_OS PS1_LOC PS1_PMT PS1_PYVENV PS1_GIT
+PS1="$PS1_RET$PS1_PYVENV$PS1_GIT$PS1_OS$PS1_INDICATOR$PS1_LOC$PS1_PMT"
+unset PS1_RET PS1_PYVENV PS1_GIT PS1_OS PS1_INDICATOR PS1_LOC PS1_PMT
 
 # terminal title
 #[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
