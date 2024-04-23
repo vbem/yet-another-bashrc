@@ -228,7 +228,7 @@ PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 
 # python venv
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-PS1_PYVENV=$a'97;42'$b'$([[ -n "$VIRTUAL_ENV" ]] && x="${VIRTUAL_ENV%/.venv}" && echo " 🐍 ${x##*/} ")'$c
+PS1_PYVENV=$a'97;42'$b'$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo " 🐍 $v ${p##*/} "; })'$c
 
 # git
 # https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-Bash
@@ -277,7 +277,10 @@ command -v helm &>/dev/null && source <(helm completion bash 2>/dev/null)
 command -v terraform &>/dev/null && complete -C "$(command -v terraform)" terraform
 
 # Go Command completion https://pkg.go.dev/github.com/posener/complete/v2
-command -v go &>/dev/null && gocomplete="$(go env GOPATH)/bin/gocomplete" && [[ -x "$gocomplete" ]] && { complete -C "$gocomplete" go; unset gocomplete; }
+command -v go &>/dev/null && gocomplete="$(go env GOPATH)/bin/gocomplete" && [[ -x "$gocomplete" ]] && {
+    complete -C "$gocomplete" go
+    unset gocomplete
+}
 
 # hstr setup https://github.com/dvorka/hstr?tab=readme-ov-file#configuration
 # dynamic load will swallow inputs during bash startup:
