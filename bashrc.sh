@@ -91,12 +91,12 @@ alias .go.setup.user=$'rm -rf ~/.local/go/ && mkdir -p ~/.local/go/ \
   && echo \'export PATH=$PATH:~/.local/go/bin\''
 
 # python 🐍
-alias .venv.create='python3 -m venv --clear --without-pip'
+# shellcheck disable=SC2139,SC2012
+alias .python.latest="$(ls -a /usr/bin/python?.* 2>/dev/null | sort -V | tail -1)"
+alias .venv.create='.python.latest -m venv --clear'
 function .venv.activate { . "$1"/bin/activate; }
-alias .pip3.show='pip3 --disable-pip-version-check -v show --files'
-alias .pip3.list='pip3 --disable-pip-version-check list --format columns'
-alias .pip3.user='pip3 --disable-pip-version-check -v install --user'
-alias .ipython3='ipython3 --nosep --no-confirm-exit --no-term-title --no-automagic --colors Linux'
+alias .venv.path='echo $VIRTUAL_ENV'
+alias .pip.get='curl -sL https://bootstrap.pypa.io/get-pip.py'
 
 # docker 🐳
 alias .docker.system.prune='docker system prune --all --force --volumes'
@@ -263,6 +263,8 @@ unset PS1_RET PS1_PYVENV PS1_GIT PS1_OS PS1_INDICATOR PS1_LOC PS1_PMT
 # terminal title
 #[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
 PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1"
+
+# auto completions
 
 # kubectl completion https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
 command -v kubectl &>/dev/null && source <(kubectl completion bash 2>/dev/null)
