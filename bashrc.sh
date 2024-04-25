@@ -65,6 +65,7 @@
 YET_ANOTHER_BASHRC="$(realpath "${BASH_SOURCE[0]}")" && declare -r YET_ANOTHER_BASHRC
 
 # common aliases
+alias .dotenv='[[ -r .env ]] && { set -o allexport; source .env; set +o allexport; }'
 alias .ls='ls --almost-all -l --classify --human-readable --time-style=long-iso --color=auto'
 alias .tree='tree -fiapughDFCN --timefmt %F_%T --du --dirsfirst'
 alias .grep='grep -E -n --color=auto'
