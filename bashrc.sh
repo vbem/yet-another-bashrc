@@ -223,9 +223,11 @@ unset GIT_PMT_LIST
 
 # OS indicator
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
-    RAW_OS="💻"
+    RAW_OS="🇼🇸"
 elif [[ -f /.dockerenv ]]; then
     RAW_OS="🐳"
+elif [[ -z "$SSH_CLIENT" ]] && [[ -z "$SSH_TTY" ]]; then
+    RAW_OS="💻"
 else
     RAW_OS="☁️"
 fi
