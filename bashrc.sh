@@ -214,7 +214,6 @@ for f in "${GIT_PMT_LIST[@]}"; do
     declare -r GIT_PS1_SHOWUNTRACKEDFILES=1
     declare -r GIT_PS1_SHOWUPSTREAM="verbose legacy git"
     declare -r GIT_PS1_DESCRIBE_STYLE=branch
-    declare -r GIT_PS1_SHOWCOLORHINTS=1
     source "$f"
     PS1_GIT=$a'97;104'$b'$(__git_ps1 " 🔀 %s ")'$c
     break
