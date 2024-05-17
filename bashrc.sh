@@ -92,12 +92,13 @@ alias .go.setup.user=$'rm -rf ~/.local/go/ && mkdir -p ~/.local/go/ \
   && echo \'export PATH=$PATH:~/.local/go/bin\''
 
 # python 🐍
+# https://docs.python.org/3/library/venv.html
 # shellcheck disable=SC2139,SC2012
 alias .python.latest="$(ls -a /usr/bin/python?.* 2>/dev/null | sort -V | tail -1)"
-alias .venv.create='.python.latest -m venv --clear'
+alias .venv.create='.python.latest -m venv --symlinks --clear --upgrade-deps'
 function .venv.activate { . "$1"/bin/activate; }
+alias .venv.status='python -c "import sys; exit(0 if sys.prefix!=sys.base_prefix else 1)"'
 alias .venv.path='echo $VIRTUAL_ENV'
-alias .pip.get='curl -sL https://bootstrap.pypa.io/get-pip.py'
 
 # docker 🐳
 alias .docker.system.prune='docker system prune --all --force --volumes'
