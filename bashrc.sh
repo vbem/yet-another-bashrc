@@ -99,7 +99,6 @@ alias .venv.create='.python.latest -m venv --symlinks --clear --upgrade-deps'
 function .venv.activate { . "$1"/bin/activate; }
 alias .venv.status='python -c "import sys; exit(0 if sys.prefix!=sys.base_prefix else 1)"'
 alias .venv.path='echo $VIRTUAL_ENV'
-alias .python.sys='python -c "import sys,pprint; pprint.pprint({k:v for k,v in sys.__dict__.items() if not (k.startswith(\"_\") or callable(v))}, compact=True)"'
 
 # docker 🐳
 alias .docker.system.prune='docker system prune --all --force --volumes'
