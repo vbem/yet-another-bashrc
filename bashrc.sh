@@ -81,7 +81,7 @@ alias .nginx.reload='sudo nginx -t && sudo systemctl reload nginx'
 alias .curl.header='curl -sv -o /dev/null'
 alias .curl.ip='curl -s -4 myip.ipip.net'
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
-alias .clean.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.python_history ~/*-ks.cfg ~/.cache/ ~/.pki/ ~/.oracle_jre_usage/ ~/.config/htop/'
+alias .clean.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.bashdb_hist ~/.python_history ~/*-ks.cfg ~/.cache/ ~/.pki/ ~/.oracle_jre_usage/ ~/.config/htop/'
 alias .imgcat='curl -Ls "https://iterm2.com/utilities/imgcat" | bash -s --'
 
 # golang 🐹
