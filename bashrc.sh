@@ -189,17 +189,17 @@ export GROFF_NO_SGR=1
 # for PS1
 
 # color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
-a='\[\e[0m\]\[\e['
-b='m\]'
-c="$a"'0'"$b"
-sep="$a"'2;90'"$b"
+beg='\[\e['
+end='m\]'
+rst=$beg'0'$end
+dim=$beg'2;90'$end
 
 # error return code indicator
-PS1_RET='$(r=$? && (( $r )) && echo "'$a'1;91;103'$b' ⛔ $r '$c'")'
+PS1_RET='$(r=$? && (( $r )) && echo "'$beg'1;91;103'$end' ⛔ $r '$rst'")'
 
 # python venv indicator
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-PS1_PYVENV='$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo "'$a'97;42'$b' 🐍 $v ${p##*/} '$c'"; })'
+PS1_PYVENV='$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo "'$beg'42'$end' 🐍 ${v%.*}_${p##*/} '$rst'"; })'
 
 # git indicator
 # https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-Bash
@@ -215,7 +215,7 @@ for f in "${GIT_PMT_LIST[@]}"; do
     declare -r GIT_PS1_SHOWUPSTREAM="verbose legacy git"
     declare -r GIT_PS1_DESCRIBE_STYLE=branch
     source "$f"
-    PS1_GIT='$(g="$(__git_ps1 %s)" && [[ -n "$g" ]] && echo "'$a'97;104'$b' 🔀 $g '$c'")'
+    PS1_GIT='$(g="$(__git_ps1 %s)" && [[ -n "$g" ]] && echo "'$beg'104'$end' 🔀 $g '$rst'")'
     break
 done
 unset GIT_PMT_LIST
@@ -241,26 +241,26 @@ elif [[ -f /etc/system-release ]]; then
 else
     RAW_OS+=" unknown"
 fi
-PS1_OS=$a'37;46'$b" $RAW_OS "$c
+PS1_OS=$beg'46'$end" $RAW_OS "$rst
 unset RAW_OS
 
 # other indicators
 RAW_OTHERS=''
 [[ "$TERM_PROGRAM" == "vscode" ]] && RAW_OTHERS+=' 🆚'
 shopt -q login_shell || RAW_OTHERS+=' 🔓'
-[[ -n "$RAW_OTHERS" ]] && PS1_INDICATOR=$a'100'$b"$RAW_OTHERS "$c
+[[ -n "$RAW_OTHERS" ]] && PS1_INDICATOR=$beg'100'$end"$RAW_OTHERS "$rst
 unset RAW_OTHERS
 
 # location indicator
-PS1_LOC=$a'3;95'$b' \u'$sep'@'$a'4;32'$b"$(hostname -I | cut -d' ' -f1)"$sep'@'$a'3;33'$b'\H'$sep':'$a'1;94'$b'$PWD '$c
+PS1_LOC=' '$beg'3;95'$end'\u'$rst$dim'@'$rst$beg'4;32'$end"$(hostname -I | cut -d' ' -f1)"$rst$dim'@'$rst$beg'3;33'$end'\H'$rst$dim':'$rst$beg'1;94'$end'$PWD'$rst
 
 # prompt
-PS1_PMT='\n'$a'1;31'$b'\$'$c' '
+PS1_PMT='\n'$beg'1;3;31'$end'\$'$rst' '
 
 # all PS1
-unset a b c sep
-PS1="$PS1_RET$PS1_PYVENV$PS1_GIT$PS1_OS$PS1_INDICATOR$PS1_LOC$PS1_PMT"
+PS1="$rst$PS1_RET$PS1_PYVENV$PS1_GIT$PS1_OS$PS1_INDICATOR$PS1_LOC$PS1_PMT"
 unset PS1_RET PS1_PYVENV PS1_GIT PS1_OS PS1_INDICATOR PS1_LOC PS1_PMT
+unset beg end rst dim
 
 # terminal title
 #[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
