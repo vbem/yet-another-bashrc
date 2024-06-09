@@ -57,11 +57,9 @@
 #     source ~/.bashrc
 #         SEE ABOVE
 
-# must interactive shell
+# must interactive shell, avoid duplicated source
 [[ $- == *i* ]] || return
-# avoid duplicated source
 [[ -v YET_ANOTHER_BASHRC ]] && return
-# sourced sentinel
 YET_ANOTHER_BASHRC="$(realpath "${BASH_SOURCE[0]}")" && declare -r YET_ANOTHER_BASHRC
 
 # common aliases
@@ -194,14 +192,14 @@ export GROFF_NO_SGR=1
 a='\[\e[0m\]\[\e['
 b='m\]'
 c="$a"'0'"$b"
-x1="$a"'2;90'"$b"
+sep="$a"'2;90'"$b"
 
 # error return code indicator
-PS1_RET=$a'1;91;103'$b'$(r=$? && (( $r )) && echo " ⛔ $r ")'$c
+PS1_RET='$(r=$? && (( $r )) && echo "'$a'1;91;103'$b' ⛔ $r '$c'")'
 
 # python venv indicator
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-PS1_PYVENV=$a'97;42'$b'$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo " 🐍 $v ${p##*/} "; })'$c
+PS1_PYVENV='$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo "'$a'97;42'$b' 🐍 $v ${p##*/} '$c'"; })'
 
 # git indicator
 # https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-Bash
@@ -217,7 +215,7 @@ for f in "${GIT_PMT_LIST[@]}"; do
     declare -r GIT_PS1_SHOWUPSTREAM="verbose legacy git"
     declare -r GIT_PS1_DESCRIBE_STYLE=branch
     source "$f"
-    PS1_GIT=$a'97;104'$b'$(__git_ps1 " 🔀 %s ")'$c
+    PS1_GIT='$(g="$(__git_ps1 %s)" && [[ -n "$g" ]] && echo "'$a'97;104'$b' 🔀 $g '$c'")'
     break
 done
 unset GIT_PMT_LIST
@@ -254,19 +252,19 @@ shopt -q login_shell || RAW_OTHERS+=' 🔓'
 unset RAW_OTHERS
 
 # location indicator
-PS1_LOC=$a'3;95'$b' \u'$a'1;35'$b'$([ "$(id -ng)" != "$(id -nu)" ] && echo ":$(id -ng)")'$x1'@'$a'4;32'$b"$(hostname -I | cut -d' ' -f1)"$x1'@'$a'3;33'$b'\H'$x1':'$a'1;94'$b'$PWD '$c
+PS1_LOC=$a'3;95'$b' \u'$sep'@'$a'4;32'$b"$(hostname -I | cut -d' ' -f1)"$sep'@'$a'3;33'$b'\H'$sep':'$a'1;94'$b'$PWD '$c
 
 # prompt
 PS1_PMT='\n'$a'1;31'$b'\$'$c' '
 
 # all PS1
-unset a b c x1
+unset a b c sep
 PS1="$PS1_RET$PS1_PYVENV$PS1_GIT$PS1_OS$PS1_INDICATOR$PS1_LOC$PS1_PMT"
 unset PS1_RET PS1_PYVENV PS1_GIT PS1_OS PS1_INDICATOR PS1_LOC PS1_PMT
 
 # terminal title
 #[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1"
+#PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1"
 
 # auto completions
 
