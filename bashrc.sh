@@ -62,6 +62,7 @@
 [[ -v YET_ANOTHER_BASHRC ]] && return
 YET_ANOTHER_BASHRC="$(realpath "${BASH_SOURCE[0]}")" && declare -r YET_ANOTHER_BASHRC
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # common aliases
 alias .dotenv='[[ -r .env ]] && { set -o allexport; source .env; set +o allexport; }'
 alias .ls='ls --almost-all -l --classify --human-readable --time-style=long-iso --color=auto'
@@ -170,6 +171,7 @@ elif timeout 0.1 curl -s -m 1 http://169.254.169.25 >/dev/null; then
     alias .ec2.tags='aws ec2 --region $(curl -s 169.254.169.254/latest/dynamic/instance-identity/document|jq -Mrc .region) describe-tags --filters Name=resource-id,Values=$(curl -s 169.254.169.254/latest/meta-data/instance-id) | jq -Mrc "[.Tags[]|{(.Key):.Value}]|add"'
 fi
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Do not pipe output into a pager, see `man systemctl`
 export SYSTEMD_PAGER=''
 
@@ -186,20 +188,19 @@ export LESS_TERMCAP_me=$'\E[0m'
 export LESS_TERMCAP_se=$'\E[0m'
 export GROFF_NO_SGR=1
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # for PS1
 
 # color wrapper https://misc.flogisoft.com/bash/tip_colors_and_formatting
 beg='\[\e['
 end='m\]'
 rst=$beg'0'$end
-dim=$beg'2;90'$end
+
+# start PS1
+PS1=$rst
 
 # error return code indicator
-PS1_RET='$(r=$? && (( $r )) && echo "'$beg'1;91;103'$end' ⛔ $r '$rst'")'
-
-# python venv indicator
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-PS1_PYVENV='$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo "'$beg'42'$end' 🐍 ${v%.*}_${p##*/} '$rst'"; })'
+PS1+='$(r=$? && (( $r )) && echo "'$beg'31;103'$end' ⛔ $r ")'
 
 # git indicator
 # https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-Bash
@@ -215,10 +216,21 @@ for f in "${GIT_PMT_LIST[@]}"; do
     declare -r GIT_PS1_SHOWUPSTREAM="verbose legacy git"
     declare -r GIT_PS1_DESCRIBE_STYLE=branch
     source "$f"
-    PS1_GIT='$(g="$(__git_ps1 %s)" && [[ -n "$g" ]] && echo "'$beg'104'$end' 🔀 $g '$rst'")'
+    PS1+='$(g="$(__git_ps1 %s)"; [[ -n "$g" ]] && echo "'$beg'97;44'$end' 🔀 $g ")'
     break
 done
 unset GIT_PMT_LIST
+
+# python venv indicator
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+PS1+='$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo "'$beg'97;46'$end' 🐍 ${v%.*} ${p##*/} "; })'
+
+# other indicators
+RAW_OTHERS=''
+[[ "$TERM_PROGRAM" == "vscode" ]] && RAW_OTHERS+=' 🆚'
+shopt -q login_shell || RAW_OTHERS+=' 🔓'
+[[ -n "$RAW_OTHERS" ]] && PS1+=$beg'42'$end"$RAW_OTHERS "
+unset RAW_OTHERS
 
 # OS indicator
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
@@ -241,31 +253,19 @@ elif [[ -f /etc/system-release ]]; then
 else
     RAW_OS+=" unknown"
 fi
-PS1_OS=$beg'46'$end" $RAW_OS "$rst
+PS1+=$beg'97;100'$end" $RAW_OS "
 unset RAW_OS
 
-# other indicators
-RAW_OTHERS=''
-[[ "$TERM_PROGRAM" == "vscode" ]] && RAW_OTHERS+=' 🆚'
-shopt -q login_shell || RAW_OTHERS+=' 🔓'
-[[ -n "$RAW_OTHERS" ]] && PS1_INDICATOR=$beg'100'$end"$RAW_OTHERS "$rst
-unset RAW_OTHERS
-
 # location indicator
-PS1_LOC=' '$beg'3;95'$end'\u'$rst$dim'@'$rst$beg'4;32'$end"$(hostname -I | cut -d' ' -f1)"$rst$dim'@'$rst$beg'3;33'$end'\H'$rst$dim':'$rst$beg'1;94'$end'$PWD'$rst
+dim=$beg'2;90'$end
+PS1+=$beg'1;3;95;49'$end' \u'$dim'@'$beg'22;32'$end"$(hostname -I | cut -d' ' -f1)"$dim'@'$beg'22;33'$end'\H'$dim':'$beg'22;1;94'$end'$PWD'
 
 # prompt
-PS1_PMT='\n'$beg'1;3;31'$end'\$'$rst' '
+PS1+=$rst'\n'$beg'1;31'$end'\$'$rst' '
 
-# all PS1
-PS1="$rst$PS1_RET$PS1_PYVENV$PS1_GIT$PS1_OS$PS1_INDICATOR$PS1_LOC$PS1_PMT"
-unset PS1_RET PS1_PYVENV PS1_GIT PS1_OS PS1_INDICATOR PS1_LOC PS1_PMT
 unset beg end rst dim
 
-# terminal title
-#[ -z "$PROMPT_COMMAND" ] && PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-#PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1"
-
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # auto completions
 
 # kubectl completion https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
