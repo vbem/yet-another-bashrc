@@ -200,6 +200,7 @@ rst=$beg'0'$end
 PS1=$rst
 
 # error return code indicator
+# shellcheck disable=SC2154
 PS1+='$(r=$? && (( $r )) && echo "'$beg'31;103'$end' ⛔ $r ")'
 
 # git indicator
@@ -216,6 +217,7 @@ for f in "${GIT_PMT_LIST[@]}"; do
     declare -r GIT_PS1_SHOWUPSTREAM="verbose legacy git"
     declare -r GIT_PS1_DESCRIBE_STYLE=branch
     source "$f"
+    # shellcheck disable=SC2154
     PS1+='$(g="$(__git_ps1 %s)"; [[ -n "$g" ]] && echo "'$beg'97;44'$end' 🔀 $g ")'
     break
 done
@@ -223,6 +225,7 @@ unset GIT_PMT_LIST
 
 # python venv indicator
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+# shellcheck disable=SC2154
 PS1+='$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo "'$beg'97;46'$end' 🐍 ${v%.*} ${p##*/} "; })'
 
 # other indicators
