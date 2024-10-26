@@ -81,7 +81,6 @@ alias .curl.header='curl -sv -o /dev/null'
 alias .curl.ip='curl -s -4 myip.ipip.net'
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
 alias .clean.home='rm -rf ~/.viminfo ~/.wget-hsts ~/.lesshst ~/.bashdb_hist ~/.python_history ~/*-ks.cfg ~/.cache/ ~/.pki/ ~/.oracle_jre_usage/ ~/.config/htop/'
-alias .imgcat='curl -Ls "https://iterm2.com/utilities/imgcat" | bash -s --'
 
 # golang 🐹
 alias .go.setup.system=$'sudo rm -rf /usr/local/go/ && curl -L https://go.dev/dl/$(curl -Ls https://go.dev/dl/?mode=json | jq -Mcre ".[0].version").linux-amd64.tar.gz | sudo tar --directory /usr/local/ --extract --gzip && sudo tee /etc/profile.d/golang.sh <<< \'export PATH=$PATH:/usr/local/go/bin\' >/dev/null && source /etc/profile.d/golang.sh && go version'
@@ -125,7 +124,13 @@ alias .git.config.local.user.name='git config --local user.name'
 alias .git.config.local.user.email='git config --local user.email'
 alias .git.config.local.list='git config --local --list'
 
+# WSL 🏘️
+alias .wsl.explorer='explorer.exe .'
+alias .wsl.interop.off='echo 0 > /proc/sys/fs/binfmt_misc/WSLInterop'
+alias .wsl.interop.on='echo 1 > /proc/sys/fs/binfmt_misc/WSLInterop'
+
 # VS code 🆚
+alias .imgcat='curl -Ls "https://iterm2.com/utilities/imgcat" | bash -s --'
 alias .code='code --verbose'
 alias .code.add='.code --reuse-window --add'
 alias .code.diff='.code --reuse-window --diff'
