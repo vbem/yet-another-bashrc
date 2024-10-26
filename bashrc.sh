@@ -69,7 +69,7 @@ alias .ls='ls --almost-all -l --classify --human-readable --time-style=long-iso 
 alias .tree='tree -fiapughDFCN --timefmt %F_%T --du --dirsfirst'
 alias .grep='grep -E -n --color=auto'
 alias .diff='diff -y'
-alias .date='date +"%F %T %z"'
+alias .date='date --iso-8601=sec'
 alias .netstat='netstat -ltnpe'
 alias .ss='ss -ltnpe'
 alias .ps='ps ux'
