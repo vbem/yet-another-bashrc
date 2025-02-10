@@ -94,7 +94,7 @@ alias .go.setup.user=$'rm -rf ~/.local/go/ && mkdir -p ~/.local/go/ \
 # shellcheck disable=SC2139,SC2012
 alias .py.latest="$(ls -a /usr/bin/python?.* 2>/dev/null | sort -V | tail -1)"
 alias .py.venv.create='.py.latest -m venv --symlinks --clear --upgrade-deps'
-function .py.venv.activate { . "$1"/bin/activate; }
+function .py.venv.activate { . "${1:-.venv}"/bin/activate; }
 alias .py.venv.status='python -c "import sys; exit(0 if sys.prefix!=sys.base_prefix else 1)"'
 alias .py.venv.path='echo $VIRTUAL_ENV'
 alias .py.cache.clean='find . -type d -name __pycache__ -exec rm -rf {} +'
