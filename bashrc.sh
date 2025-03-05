@@ -77,6 +77,7 @@ alias .pstree='pstree -up'
 alias .pidof='pidof -x'
 alias .grep.code='grep -E -v "^[[:space:]]*$|^[[:space:]]*#"'
 alias .nginx.reload='sudo nginx -t && sudo systemctl reload nginx'
+alias .export.proxy.socks5='export ALL_PROXY=socks5h://localhost'
 alias .curl.header='curl -sv -o /dev/null'
 alias .curl.ip='curl -s -4 myip.ipip.net'
 alias .kubectl.get.roletable="kubectl get rolebindings,clusterrolebindings -A -o jsonpath=\"{range .items[*]}{.metadata.namespace}/{.kind}/{.metadata.name}{' | '}{.roleRef.kind}/{.roleRef.name}{' | '}{range .subjects[*]}({.namespace}/{.kind}/{.name}){end}{'\n'}{end}\""
