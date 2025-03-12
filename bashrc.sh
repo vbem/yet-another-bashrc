@@ -232,7 +232,7 @@ unset GIT_PMT_LIST
 # python venv indicator
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 # shellcheck disable=SC2154
-PS1+='$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo "'$beg'97;46'$end' 🐍 ${v%.*} ${p##*/} "; })'
+PS1+='$([[ -n "$VIRTUAL_ENV" ]] && { p="${VIRTUAL_ENV%/.venv}"; v="$(grep -oP "^version *= *\K.+" "$VIRTUAL_ENV/pyvenv.cfg" 2>/dev/null)"; echo "'$beg'97;46'$end' 🐍 ${p##*/}/$v "; })'
 
 # other indicators
 RAW_OTHERS=''
