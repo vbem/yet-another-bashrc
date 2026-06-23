@@ -321,4 +321,7 @@ command -v hstr &>/dev/null && {
     export HSTR_TIOCSTI=y
 }
 
+# https://junegunn.github.io/fzf/
+command -v fzf &>/dev/null && eval "$(fzf --bash)"
+
 :
