@@ -213,22 +213,18 @@ PS1+='$(r=$? && (( $r )) && echo "'$beg'31;103'$end' ⛔ $r ")'
 # git indicator
 # https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-Bash
 # https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
-GIT_PMT_LIST=(
-    '/usr/share/git-core/contrib/completion/git-prompt.sh'
-)
-for f in "${GIT_PMT_LIST[@]}"; do
-    [[ ! -r "$f" ]] && continue
-    declare -r GIT_PS1_SHOWDIRTYSTATE=1
-    declare -r GIT_PS1_SHOWSTASHSTATE=1
-    declare -r GIT_PS1_SHOWUNTRACKEDFILES=1
-    declare -r GIT_PS1_SHOWUPSTREAM="verbose legacy git"
-    declare -r GIT_PS1_DESCRIBE_STYLE=branch
-    source "$f"
+if ! declare -F __git_ps1 &>/dev/null && [[ -r /usr/share/git-core/contrib/completion/git-prompt.sh ]]; then # RHEL
+    source /usr/share/git-core/contrib/completion/git-prompt.sh
+fi
+if declare -F __git_ps1 &>/dev/null; then
+    GIT_PS1_SHOWDIRTYSTATE=1
+    GIT_PS1_SHOWSTASHSTATE=1
+    GIT_PS1_SHOWUNTRACKEDFILES=1
+    GIT_PS1_SHOWUPSTREAM="verbose legacy git"
+    GIT_PS1_DESCRIBE_STYLE=branch
     # shellcheck disable=SC2154
     PS1+='$(g="$(__git_ps1 %s)"; [[ -n "$g" ]] && echo "'$beg'97;44'$end' 🔀 $g ")'
-    break
-done
-unset GIT_PMT_LIST
+fi
 
 # python venv indicator
 export VIRTUAL_ENV_DISABLE_PROMPT=1
