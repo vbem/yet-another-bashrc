@@ -127,6 +127,7 @@ alias .git.config.local.list='git config --local --list'
 
 # WSL 🪟
 alias .wsl.explorer='explorer.exe .'
+alias .wsl.shitdown='wsl.exe --shutdown'
 alias .wsl.interop.off='echo 0 > /proc/sys/fs/binfmt_misc/WSLInterop'
 alias .wsl.interop.on='echo 1 > /proc/sys/fs/binfmt_misc/WSLInterop'
 
