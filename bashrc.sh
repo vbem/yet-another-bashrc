@@ -125,7 +125,7 @@ alias .git.config.local.user.name='git config --local user.name'
 alias .git.config.local.user.email='git config --local user.email'
 alias .git.config.local.list='git config --local --list'
 
-# WSL 🏘️
+# WSL 🪟
 alias .wsl.explorer='explorer.exe .'
 alias .wsl.interop.off='echo 0 > /proc/sys/fs/binfmt_misc/WSLInterop'
 alias .wsl.interop.on='echo 1 > /proc/sys/fs/binfmt_misc/WSLInterop'
@@ -243,7 +243,7 @@ unset RAW_OTHERS
 
 # OS indicator
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
-    RAW_OS="🏘️"
+    RAW_OS="🪟"
 elif [[ -f /.dockerenv ]]; then
     RAW_OS="🐳"
 elif [[ -z "$SSH_CLIENT" ]] && [[ -z "$SSH_TTY" ]]; then
