@@ -128,8 +128,8 @@ alias .git.config.local.list='git config --local --list'
 # WSL 🪟
 alias .wsl.explorer='explorer.exe .'
 alias .wsl.shutdown='wsl.exe --shutdown'
-alias .wsl.interop.off='echo 0 > /proc/sys/fs/binfmt_misc/WSLInterop'
-alias .wsl.interop.on='echo 1 > /proc/sys/fs/binfmt_misc/WSLInterop'
+alias .wsl.interop.0='sudo tee /proc/sys/fs/binfmt_misc/WSLInterop >/dev/null <<<0 && cat /proc/sys/fs/binfmt_misc/WSLInterop'
+alias .wsl.interop.1='sudo tee /proc/sys/fs/binfmt_misc/WSLInterop >/dev/null <<<1 && cat /proc/sys/fs/binfmt_misc/WSLInterop'
 
 # VS code 🆚
 alias .imgcat='curl -Ls "https://iterm2.com/utilities/imgcat" | bash -s --'
