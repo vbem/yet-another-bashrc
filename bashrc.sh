@@ -243,8 +243,8 @@ shopt -q login_shell || RAW_OTHERS+=' 🔓'
 unset RAW_OTHERS
 
 # OS indicator
-if [[ -n "$WSL_DISTRO_NAME" ]]; then
-    RAW_OS="🪟"
+if grep -Fsqi microsoft /proc/sys/kernel/osrelease; then
+    RAW_OS="🪟" # WSL
 elif [[ -f /.dockerenv ]]; then
     RAW_OS="🐳"
 elif [[ -z "$SSH_CLIENT" ]] && [[ -z "$SSH_TTY" ]]; then
