@@ -270,8 +270,10 @@ PS1+=$rst'\n'$beg'1;31'$end'\$'$rst' '
 
 unset beg end rst dim
 
-# by default, ubuntu set term title in PS1, whereas RHEL use PROMPT_COMMAND
-# [[ -z "$PROMPT_COMMAND" ]] && PROMPT_COMMAND='printf "\033k%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
+# by default, ubuntu set term title in PS1 and leaving PROMPT_COMMAND as an array
+if [[ "$(declare -p PROMPT_COMMAND 2>/dev/null)" =~ "declare -a" ]]; then
+    PROMPT_COMMAND+=('printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"')
+fi
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # auto completions
