@@ -8,11 +8,12 @@
 # if login shell
 #     source /etc/profile
 #         export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL
-#         configure  umask
+#         configure umask
 #         source /etc/profile.d/*.sh
+#         source /etc/bashrc, see below
 #     source ~/.bash_profile
 #         source ~/.bashrc
-#             SEE BELOW
+#             source /etc/bashrc, see below
 #         export PATH=$PATH:$HOME/bin
 # else if interactive
 #     source ~/.bashrc
@@ -30,27 +31,25 @@
 #         if $PS1 # interactive
 #             if "$BASH" != "/bin/sh"
 #                 source /etc/bash.bashrc
-#                     if not $PS1 # not interactive
-#                         return # don't do anything
+#                     if not interactive, then return
 #                     configure checkwinsize
 #                     configure $debian_chroot
 #                     if not SUDOing
 #                         configure $PS1
-#                     print sudo hint
-#                     if the command-not-found package is installed, use it
+#                     if the command-not-found package is installed, register it
 #             else
 #                 PS1='# ' or '$ '
 #         source /etc/profile.d/*.sh
 #     source ~/.profile
 #         source ~/.bashrc
-#             if not $PS1 # not interactive
-#                 return # don't do anything
+#             if not interactive, then return
 #             configure history
 #             configure lesspipe
 #             configure $debian_chroot
-#             configure $PS1 on $color_prompt
+#             configure $PS1
 #             configure aliases
 #             source ~/.bash_aliases
+#         extend PATH
 # else if interactive
 #     source /etc/bash.bashrc
 #         SEE ABOVE
@@ -270,6 +269,9 @@ PS1+=$beg'1;3;95;49'$end' \u'$dim'@'$beg'22;32'$end"$(hostname -I | cut -d' ' -f
 PS1+=$rst'\n'$beg'1;31'$end'\$'$rst' '
 
 unset beg end rst dim
+
+# by default, ubuntu set term title in PS1, whereas RHEL use PROMPT_COMMAND
+[[ -z "$PROMPT_COMMAND" ]] && PROMPT_COMMAND='printf "\033k%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # auto completions
